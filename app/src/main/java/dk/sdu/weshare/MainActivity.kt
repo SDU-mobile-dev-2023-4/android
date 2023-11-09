@@ -13,6 +13,7 @@ import dk.sdu.weshare.pages.GroupDetailsPage
 import dk.sdu.weshare.pages.GroupPage
 import dk.sdu.weshare.pages.GroupsPage
 import dk.sdu.weshare.pages.ProfilePage
+import dk.sdu.weshare.pages.ProfilePageProps
 import dk.sdu.weshare.pages.SignInPage
 
 class MainActivity : ComponentActivity() {
@@ -46,15 +47,16 @@ class MainActivity : ComponentActivity() {
                     arguments = listOf(navArgument("userId") { type = NavType.IntType })
                 ) { navBackStackEntry ->
                     ProfilePage(
-                        navBackStackEntry.arguments?.getInt("userId")!!,
-                        onBack = {
-                            navController.navigate("groups")
-                        },
+                        ProfilePageProps(
+                            navBackStackEntry.arguments?.getInt("userId")!!,
+                            onBack = {
+                                navController.navigate("groups")
+                            },
+                        )
                     )
                 }
                 composable(
-                    "group/{groupId}",
-                    arguments = listOf(navArgument("groupId") {
+                    "group/{groupId}", arguments = listOf(navArgument("groupId") {
                         type = NavType.IntType
                     })
                 ) { navBackStackEntry ->
@@ -75,8 +77,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable(
-                    "group_details?groupId={groupId}",
-                    arguments = listOf(navArgument("groupId") {
+                    "group_details?groupId={groupId}", arguments = listOf(navArgument("groupId") {
                         nullable = true
                     })
                 ) { navBackStackEntry ->
@@ -88,15 +89,15 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable(
-                    "expense_details/{groupId}?expenseId={expenseId}",
-                    arguments = listOf(
+                    "expense_details/{groupId}?expenseId={expenseId}", arguments = listOf(
                         navArgument("groupId") {
                             type = NavType.IntType
                         },
                         navArgument("expenseId") {
                             nullable = true
                         },
-                    )) { navBackStackEntry ->
+                    )
+                ) { navBackStackEntry ->
                     ExpenseDetailsPage(
                         navBackStackEntry.arguments?.getInt("groupId")!!,
                         navBackStackEntry.arguments?.getString("expenseId"),
