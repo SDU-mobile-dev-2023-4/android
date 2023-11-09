@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.Model.Group
 
 @Composable
 fun GroupsPage(
@@ -33,31 +34,33 @@ fun GroupsPage(
     onViewGroup: (Int) -> Unit,
     onCreateGroup: () -> Unit,
 ) {
-    Column {
+    val groups = listOf(
+        Group(1, "Group 1"),
+        Group(2, "Group 2"),
+        Group(3, "Group 3"),
+        Group(4, "Group 4"),
+    )
 
+    Column {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(
-                imageVector = Icons.Outlined.AccountCircle,
+            Icon(imageVector = Icons.Outlined.AccountCircle,
                 contentDescription = "Profile",
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable { onViewProfile(6969) }
-            )
+                    .clickable { onViewProfile(6969) })
             Text("user.name", fontSize = 30.sp)
 
-            Icon(
-                imageVector = Icons.TwoTone.Add,
+            Icon(imageVector = Icons.TwoTone.Add,
                 contentDescription = "onCreateGroup",
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable { onCreateGroup() }
-            )
+                    .clickable { onCreateGroup() })
         }
 
 
@@ -75,28 +78,28 @@ fun GroupsPage(
             Spacer(Modifier.size(16.dp))
 
             Column {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, color = Color.Black)
-                    .padding(start = 16.dp)
-                    .clickable { onViewGroup(1)
-                    }
-                ) {
-                    Text("Group 1", fontSize = 30.sp)
-
-                    Icon(
-                        imageVector = Icons.Outlined.KeyboardArrowRight,
-                        contentDescription = "onViewGroup",
+                groups.forEach { group ->
+                    Row(horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .size(60.dp)
-                            .clip(CircleShape)
+                            .fillMaxWidth()
+                            .border(1.dp, color = Color.Black)
+                            .padding(start = 16.dp)
+                            .clickable {
+                                onViewGroup(group.id)
+                            }) {
+                        Text("Group ${group.name}", fontSize = 30.sp)
 
-                    )
+                        Icon(
+                            imageVector = Icons.Outlined.KeyboardArrowRight,
+                            contentDescription = "View Group ${group.name}",
+                            modifier = Modifier
+                                .size(60.dp)
+                                .clip(CircleShape)
+
+                        )
+                    }
                 }
-
             }
         }
     }
