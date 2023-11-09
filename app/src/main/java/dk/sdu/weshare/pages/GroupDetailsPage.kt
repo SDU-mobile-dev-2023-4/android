@@ -43,12 +43,17 @@ fun GroupDetailsPage(
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
     var groupname by remember { mutableStateOf("") }
-    var users by remember { mutableStateOf(mutableListOf<String>()) }
+    var members by remember { mutableStateOf(listOf<String>()) }
 
     if (isDialogOpen) {
-        AddUserPopup(onAddUser = { email -> users.add(email)
-            isDialogOpen = false
-        }, onDismiss = { isDialogOpen = false })
+        AddUserPopup(
+            onAddUser = { email ->
+                members += email
+                isDialogOpen = false
+            }, onDismiss = {
+                isDialogOpen = false
+            }
+        )
     }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -77,7 +82,6 @@ fun GroupDetailsPage(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-
             Text("Members", fontSize = 30.sp)
             Icon(imageVector = Icons.TwoTone.Add,
                 contentDescription = "onCreateGroup",
@@ -88,14 +92,14 @@ fun GroupDetailsPage(
         }
 
         Column {
-            users.forEach { user ->
+            members.forEach { member ->
                 Row(horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp)
                 ) {
-                    Text(user, fontSize = 30.sp)
+                    Text(member, fontSize = 30.sp)
                 }
             }
         }
