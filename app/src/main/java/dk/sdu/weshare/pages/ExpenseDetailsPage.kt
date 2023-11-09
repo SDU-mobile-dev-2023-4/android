@@ -30,25 +30,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-private val fakeValues = listOf(
-    ExpenseDetailsPageProps(1, null) { },
-//    ExpenseDetailsPageProps(1, "2") { },
-)
-
-class ExpenseDetailsPagePropsProvider : PreviewParameterProvider<ExpenseDetailsPageProps> {
-    override val values = fakeValues.asSequence()
-    override val count: Int = values.count()
-}
-
-data class ExpenseDetailsPageProps(
-    val groupId: Int,
-    val expenseId: String?,
-    val onSave: () -> Unit,
-)
+import dk.sdu.weshare.fakeValues.ExpenseDetailsPageProps
+import dk.sdu.weshare.fakeValues.ExpenseDetailsPagePropsProvider
+import dk.sdu.weshare.fakeValues.Users
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
@@ -56,7 +43,11 @@ data class ExpenseDetailsPageProps(
 fun ExpenseDetailsPage(
     @PreviewParameter(ExpenseDetailsPagePropsProvider::class) props: ExpenseDetailsPageProps
 ) {
-    val possiblePayers = listOf("Jakob", "Jon", "Michael")
+
+
+    val users = Users().getUsers()
+    val getUsersInSpecificGroups = users.filter { it.groupIds.contains(props.groupId) }
+    val possiblePayers = getUsersInSpecificGroups.map { it.name }
 
     var title by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
