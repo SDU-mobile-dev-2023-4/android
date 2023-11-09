@@ -59,7 +59,6 @@ fun SignInPage(onSignIn: () -> Unit) {
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next)
-            ,
         )
 
         OutlinedTextField(
