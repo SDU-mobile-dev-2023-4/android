@@ -1,6 +1,7 @@
 package dk.sdu.weshare.pages
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -77,15 +79,23 @@ fun GroupDetailsPage(
             ),
         )
 
+        Spacer(Modifier.size(16.dp))
+
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .border(1.dp, color = Color.Black)
+                .fillMaxWidth()
         ) {
-            Text("Members", fontSize = 30.sp)
+            Text("Members",
+                fontSize = 30.sp,
+                modifier = Modifier.padding(start = 16.dp))
+
             Icon(imageVector = Icons.TwoTone.Add,
                 contentDescription = "onCreateGroup",
                 modifier = Modifier
+                    .padding(start = 16.dp)
                     .size(60.dp)
                     .clip(CircleShape)
                     .clickable { isDialogOpen = true })
@@ -97,6 +107,7 @@ fun GroupDetailsPage(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .border(1.dp, color = Color.Black)
                         .padding(top = 16.dp)
                 ) {
                     Text(member, fontSize = 30.sp)
@@ -104,8 +115,7 @@ fun GroupDetailsPage(
             }
         }
 
-
-        Spacer(Modifier.size(48.dp))
+        Spacer(Modifier.weight(1f))
         Button(onClick = { onSave(groupId?.toInt() ?: 69) }) {
             Text("Save", fontSize = 30.sp)
         }
