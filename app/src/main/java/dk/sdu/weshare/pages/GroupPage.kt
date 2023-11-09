@@ -1,4 +1,4 @@
-package dk.sdu.weshare
+package dk.sdu.weshare.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,7 @@ fun GroupPage(
     onAddExpense: (Int) -> Unit,
     onViewExpense: (Int, Int) -> Unit,
 ) {
-    Column(
+    return Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier

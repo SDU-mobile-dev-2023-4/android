@@ -1,4 +1,4 @@
-package dk.sdu.weshare
+package dk.sdu.weshare.pages
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -101,5 +101,3 @@ fun GroupsPage(
         }
     }
 }
-
-

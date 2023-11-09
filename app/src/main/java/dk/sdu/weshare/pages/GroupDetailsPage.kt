@@ -1,4 +1,4 @@
-package dk.sdu.weshare
+package dk.sdu.weshare.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,9 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ExpenseDetailsPage(
-    groupId: Int,
-    expenseId: String?,
+fun GroupDetailsPage(
+    groupId: String?,
     onSave: (Int) -> Unit,
 ) {
     Column(
@@ -26,9 +25,9 @@ fun ExpenseDetailsPage(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()) {
-        Text("Expense $expenseId Details", fontSize = 70.sp)
+        Text("Group $groupId Details", fontSize = 70.sp)
         Spacer(Modifier.size(48.dp))
-        Button(onClick = { onSave(groupId) }) {
+        Button(onClick = {onSave(groupId?.toInt() ?: 69)}) {
             Text("onSave", fontSize = 30.sp)
         }
     }
