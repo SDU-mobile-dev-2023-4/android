@@ -1,4 +1,4 @@
-package dk.sdu.weshare.Model
+package dk.sdu.weshare.models
 
 data class Group(
     val id: Int,

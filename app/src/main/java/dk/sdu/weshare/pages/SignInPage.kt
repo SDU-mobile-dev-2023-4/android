@@ -94,10 +94,6 @@ fun SignInPage(onSignIn: () -> Unit) {
                 )
                 .clip(CircleShape)) {
             Text("Sign in", fontSize = 30.sp)
-
         }
     }
-
-
-
 }

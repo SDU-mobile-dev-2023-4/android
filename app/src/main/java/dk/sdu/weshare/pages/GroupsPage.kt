@@ -3,7 +3,6 @@ package dk.sdu.weshare.pages
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dk.sdu.weshare.Model.Group
+import dk.sdu.weshare.models.Group
+import dk.sdu.weshare.models.User
 
 @Composable
 fun GroupsPage(
@@ -34,6 +34,7 @@ fun GroupsPage(
     onViewGroup: (Int) -> Unit,
     onCreateGroup: () -> Unit,
 ) {
+    val user = User(1, "Jens Lyn", "+45 12 34 56 78")
     val groups = listOf(
         Group(1, "Group 1"),
         Group(2, "Group 2"),
@@ -52,9 +53,8 @@ fun GroupsPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable { onViewProfile(6969) })
+                    .clickable { onViewProfile(user.id) })
             Text("user.name", fontSize = 30.sp)
-
             Icon(imageVector = Icons.TwoTone.Add,
                 contentDescription = "onCreateGroup",
                 modifier = Modifier
@@ -62,7 +62,6 @@ fun GroupsPage(
                     .clip(CircleShape)
                     .clickable { onCreateGroup() })
         }
-
 
         Column(
             horizontalAlignment = Alignment.Start,
@@ -72,11 +71,8 @@ fun GroupsPage(
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-
             Text("Groups", fontSize = 36.sp, fontWeight = FontWeight.Bold)
-
             Spacer(Modifier.size(16.dp))
-
             Column {
                 groups.forEach { group ->
                     Row(horizontalArrangement = Arrangement.SpaceBetween,

@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dk.sdu.weshare.pages.ExpenseDetailsPage
+import dk.sdu.weshare.pages.ExpenseDetailsPageProps
 import dk.sdu.weshare.pages.GroupDetailsPage
 import dk.sdu.weshare.pages.GroupPage
 import dk.sdu.weshare.pages.GroupsPage
@@ -99,11 +100,11 @@ class MainActivity : ComponentActivity() {
                     )
                 ) { navBackStackEntry ->
                     ExpenseDetailsPage(
-                        navBackStackEntry.arguments?.getInt("groupId")!!,
-                        navBackStackEntry.arguments?.getString("expenseId"),
-                        onSave = { groupId ->
-                            navController.navigate("group/$groupId")
-                        },
+                        ExpenseDetailsPageProps(
+                            navBackStackEntry.arguments?.getInt("groupId")!!,
+                            navBackStackEntry.arguments?.getString("expenseId"),
+                            onSave = { navController.navigate("group/${navBackStackEntry.arguments?.getInt("groupId")!!}") },
+                        )
                     )
                 }
             }

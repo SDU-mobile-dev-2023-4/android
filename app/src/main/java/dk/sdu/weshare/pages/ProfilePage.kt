@@ -26,8 +26,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.models.User
 
-val fakeValues = listOf(
+private val fakeValues = listOf(
     ProfilePageProps(1) { },
 )
 
@@ -47,8 +48,10 @@ data class ProfilePageProps(
 fun ProfilePage(
     @PreviewParameter(ProfilePagePropsProvider::class) props: ProfilePageProps
 ) {
-    var name by remember { mutableStateOf("The user's name should go here ${props.userId}") }
-    var phone by remember { mutableStateOf("And their phone should be here") }
+    val user = User(props.userId, "username", "+4528142177")
+
+    var name by remember { mutableStateOf(user.name) }
+    var phone by remember { mutableStateOf(user.phone) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -66,13 +69,13 @@ fun ProfilePage(
         Spacer(Modifier.size(48.dp))
         OutlinedTextField(
             name,
-            onValueChange = { name = it },
+            onValueChange = { name = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Name") },
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
             phone,
-            onValueChange = { phone = it },
+            onValueChange = { phone = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Phone") },
             modifier = Modifier.fillMaxWidth()
         )
