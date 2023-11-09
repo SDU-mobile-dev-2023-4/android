@@ -23,36 +23,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dk.sdu.weshare.fakeValues.ProfilePageProps
-import dk.sdu.weshare.fakeValues.ProfilePagePropsProvider
 import dk.sdu.weshare.models.User
-import java.time.LocalDateTime
 
-//private val fakeValues = listOf(
-//    ProfilePageProps(1) { },
-//)
-//
-//class ProfilePagePropsProvider : PreviewParameterProvider<ProfilePageProps> {
-//    override val values = fakeValues.asSequence()
-//    override val count: Int = values.count()
-//}
-//
-//data class ProfilePageProps(
-//    val userId: Int,
-//    val onBack: () -> Unit,
-//)
+private val fakeValues = listOf(
+    ProfilePageProps(1) { },
+)
+
+class ProfilePagePropsProvider : PreviewParameterProvider<ProfilePageProps> {
+    override val values = fakeValues.asSequence()
+    override val count: Int = values.count()
+}
+
+data class ProfilePageProps(
+    val userId: Int,
+    val onBack: () -> Unit,
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun ProfilePage(
     @PreviewParameter(ProfilePagePropsProvider::class) props: ProfilePageProps
 ) {
-    val user = User(props.userId, "JAGO", "JAGO@jaffar.dk", LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), listOf(1,2,3))
+    val user = User(props.userId, "username", "+4528142177")
 
     var name by remember { mutableStateOf(user.name) }
-    var email by remember { mutableStateOf(user.email) }
+    var phone by remember { mutableStateOf(user.phone) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,8 +74,8 @@ fun ProfilePage(
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
-            email,
-            onValueChange = { email = it.filter { c -> !c.isWhitespace() } },
+            phone,
+            onValueChange = { phone = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Phone") },
             modifier = Modifier.fillMaxWidth()
         )

@@ -1,5 +1,6 @@
 package dk.sdu.weshare.pages
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,20 +24,16 @@ fun GroupPage(
 ) {
     return Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
         Text("Group $groupId", fontSize = 70.sp)
         Spacer(Modifier.size(48.dp))
-
-
-
         Button(onClick = onBack) {
             Text("onBack", fontSize = 30.sp)
         }
-
         Spacer(Modifier.size(16.dp))
         Button(onClick = { onEditGroup(groupId) }) {
             Text("onEditGroup", fontSize = 30.sp)

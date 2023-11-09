@@ -8,13 +8,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import dk.sdu.weshare.fakeValues.ExpenseDetailsPageProps
-import dk.sdu.weshare.fakeValues.ProfilePageProps
 import dk.sdu.weshare.pages.ExpenseDetailsPage
+import dk.sdu.weshare.pages.ExpenseDetailsPageProps
 import dk.sdu.weshare.pages.GroupDetailsPage
 import dk.sdu.weshare.pages.GroupPage
 import dk.sdu.weshare.pages.GroupsPage
 import dk.sdu.weshare.pages.ProfilePage
+import dk.sdu.weshare.pages.ProfilePageProps
 import dk.sdu.weshare.pages.SignInPage
 
 class MainActivity : ComponentActivity() {
