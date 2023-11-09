@@ -25,6 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.fakeValues.Groups
+
+import dk.sdu.weshare.fakeValues.Users
 import dk.sdu.weshare.models.Group
 import dk.sdu.weshare.models.User
 
@@ -34,13 +37,11 @@ fun GroupsPage(
     onViewGroup: (Int) -> Unit,
     onCreateGroup: () -> Unit,
 ) {
-    val user = User(1, "Jens Lyn", "+45 12 34 56 78")
-    val groups = listOf(
-        Group(1, "Group 1"),
-        Group(2, "Group 2"),
-        Group(3, "Group 3"),
-        Group(4, "Group 4"),
-    )
+
+    var users = Users().getUsers()
+    val user = users[0]
+
+    var groups = Groups().getGroups()
 
     Column {
         Row(
@@ -54,7 +55,7 @@ fun GroupsPage(
                     .size(60.dp)
                     .clip(CircleShape)
                     .clickable { onViewProfile(user.id) })
-            Text("user.name", fontSize = 30.sp)
+            Text(user.name, fontSize = 30.sp)
             Icon(imageVector = Icons.TwoTone.Add,
                 contentDescription = "onCreateGroup",
                 modifier = Modifier
