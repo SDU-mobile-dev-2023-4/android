@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Add
@@ -29,22 +28,39 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+private val fakeValues = listOf(
+    GroupDetailsPageProps(null) { },
+    GroupDetailsPageProps("1") { },
+)
+
+class GroupDetailsPagePropsProvider : PreviewParameterProvider<GroupDetailsPageProps> {
+    override val values = fakeValues.asSequence()
+    override val count: Int = values.count()
+}
+
+data class GroupDetailsPageProps(
+    val groupId: String?,
+    val onSave: (Int) -> Unit,
+)
+
 @SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
 fun GroupDetailsPage(
-    groupId: String?,
-    onSave: (Int) -> Unit,
+    @PreviewParameter(GroupDetailsPagePropsProvider::class) props: GroupDetailsPageProps
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
-    var groupname by remember { mutableStateOf("") }
+    var groupName by remember { mutableStateOf("") }
     var members by remember { mutableStateOf(listOf<String>()) }
 
     if (isDialogOpen) {
@@ -59,16 +75,15 @@ fun GroupDetailsPage(
     }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(48.dp)) {
-
-
+            .padding(48.dp)
+    ) {
         OutlinedTextField(
-            value = groupname,
-            onValueChange = { groupname = it.filter { c -> !c.isWhitespace() } },
+            value = groupName,
+            onValueChange = { groupName = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Name") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -85,29 +100,30 @@ fun GroupDetailsPage(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .border(1.dp, color = Color.Black)
                 .fillMaxWidth()
         ) {
-            Text("Members",
+            Text(
+                "Members",
                 fontSize = 30.sp,
-                modifier = Modifier.padding(start = 16.dp))
+                modifier = Modifier.padding(start = 16.dp)
+            )
 
             Icon(imageVector = Icons.TwoTone.Add,
                 contentDescription = "onCreateGroup",
                 modifier = Modifier
                     .padding(start = 16.dp)
                     .size(60.dp)
-                    .clip(CircleShape)
+                    .border(1.dp, color = Color.Black)
                     .clickable { isDialogOpen = true })
         }
 
         Column {
             members.forEach { member ->
-                Row(horizontalArrangement = Arrangement.SpaceBetween,
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .border(1.dp, color = Color.Black)
                         .padding(top = 16.dp)
                 ) {
                     Text(member, fontSize = 30.sp)
@@ -116,19 +132,19 @@ fun GroupDetailsPage(
         }
 
         Spacer(Modifier.weight(1f))
-        Button(onClick = { onSave(groupId?.toInt() ?: 69) }) {
+        Button(onClick = { props.onSave(props.groupId?.toInt() ?: 69) }) {
             Text("Save", fontSize = 30.sp)
         }
-
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddUserPopup(onAddUser: (email: String) -> Unit, onDismiss: () -> Unit) {
     var email by remember { mutableStateOf("") }
 
     AlertDialog(
-        onDismissRequest = { /* Handle dialog dismissal */ },
+        onDismissRequest = onDismiss,
         title = { Text(text = "Add User") },
         text = {
             TextField(
@@ -139,16 +155,12 @@ fun AddUserPopup(onAddUser: (email: String) -> Unit, onDismiss: () -> Unit) {
             )
         },
         confirmButton = {
-            Button(
-                onClick = { onAddUser(email) },
-            ) {
+            Button(onClick = { onAddUser(email) }) {
                 Text(text = "Add")
             }
         },
         dismissButton = {
-            Button(
-                onClick = onDismiss,
-            ) {
+            Button(onClick = onDismiss) {
                 Text(text = "Cancel")
             }
         }
