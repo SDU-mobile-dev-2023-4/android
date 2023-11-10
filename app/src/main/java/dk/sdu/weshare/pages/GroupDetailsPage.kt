@@ -33,35 +33,30 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.fakeValues.GroupDetailsPageProps
+import dk.sdu.weshare.fakeValues.GroupDetailsPagePropsProvider
+import dk.sdu.weshare.fakeValues.Groups
+import dk.sdu.weshare.fakeValues.Users
 
-private val fakeValues = listOf(
-    GroupDetailsPageProps(null) { },
-    GroupDetailsPageProps("1") { },
-)
-
-class GroupDetailsPagePropsProvider : PreviewParameterProvider<GroupDetailsPageProps> {
-    override val values = fakeValues.asSequence()
-    override val count: Int = values.count()
-}
-
-data class GroupDetailsPageProps(
-    val groupId: String?,
-    val onSave: (Int) -> Unit,
-)
-
-@SuppressLint("MutableCollectionMutableState")
+//@SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun GroupDetailsPage(
-    @PreviewParameter(GroupDetailsPagePropsProvider::class) props: GroupDetailsPageProps
+//    @PreviewParameter(GroupDetailsPagePropsProvider::class) props: GroupDetailsPageProps,
+    onCreateGroup: (Int) -> Unit,
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
     var groupName by remember { mutableStateOf("") }
     var members by remember { mutableStateOf(listOf<String>()) }
+
+    var createdBy = Users().getUsers().filter { user -> user.id == userId }
+    var groups = Groups().getGroups()
+//    groupName = groups[props?.groupId?.toInt() ?: 0].name
+
 
     if (isDialogOpen) {
         AddUserPopup(
@@ -132,7 +127,8 @@ fun GroupDetailsPage(
         }
 
         Spacer(Modifier.weight(1f))
-        Button(onClick = { props.onSave(props.groupId?.toInt() ?: 69) }) {
+        Button(onClick = { props.onSave(props.groupId?.toInt() ?: 69)
+        }) {
             Text("Save", fontSize = 30.sp)
         }
     }

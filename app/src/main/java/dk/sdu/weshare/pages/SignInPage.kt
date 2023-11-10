@@ -31,10 +31,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.authentication.AuthUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInPage(onSignIn: () -> Unit) {
+fun SignInPage(
+    onSignIn: (Int) -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -59,11 +61,12 @@ fun SignInPage(onSignIn: () -> Unit) {
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next)
+
         )
 
         OutlinedTextField(
             password,
-            onValueChange = { password = it.filter { c -> !c.isWhitespace() }  },
+            onValueChange = { password = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Password") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,14 +76,11 @@ fun SignInPage(onSignIn: () -> Unit) {
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
-            keyboardActions = KeyboardActions(
-                onDone = { onSignIn() }
-            )
         )
 
         Spacer(Modifier.size(48.dp))
         Button(
-            onClick = onSignIn,
+            onClick = { onSignIn(AuthUser().login("$email", "$password"))},
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,
                 contentColor = Color.Black
@@ -94,5 +94,9 @@ fun SignInPage(onSignIn: () -> Unit) {
                 .clip(CircleShape)) {
             Text("Sign in", fontSize = 30.sp)
         }
+
+
     }
 }
+
+

@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dk.sdu.weshare.fakeValues.ExpenseDetailsPageProps
+import dk.sdu.weshare.fakeValues.GroupDetailsPageProps
 import dk.sdu.weshare.fakeValues.ProfilePageProps
 import dk.sdu.weshare.pages.ExpenseDetailsPage
 import dk.sdu.weshare.pages.GroupDetailsPage
@@ -25,12 +26,13 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             NavHost(navController = navController, startDestination = "sign_in") {
+
                 composable("sign_in") {
-                    SignInPage(onSignIn = {
-                        navController.navigate("groups")
+                    SignInPage(onSignIn = {userId:Int ->
+                        navController.navigate("groups/${userId}")
                     })
                 }
-                composable("groups") {
+                composable("groups/{userId}") {
                     GroupsPage(
                         onViewProfile = { userId: Int ->
                             navController.navigate("profile/$userId")
@@ -38,10 +40,11 @@ class MainActivity : ComponentActivity() {
                         onViewGroup = { groupId: Int ->
                             navController.navigate("group/$groupId")
                         },
-                        onCreateGroup = {
-                            navController.navigate("group_details")
-                        },
-                    )
+//                        onCreateGroup = {
+//                            navController.navigate("group_details/{userId}")
+//                        }
+//                    )
+
                 }
                 composable(
                     "profile/{userId}",
@@ -51,20 +54,21 @@ class MainActivity : ComponentActivity() {
                         ProfilePageProps(
                             navBackStackEntry.arguments?.getInt("userId")!!,
                             onBack = {
-                                navController.navigate("groups")
+                                navController.navigate("groups/{userId}")
                             },
                         )
                     )
                 }
                 composable(
-                    "group/{groupId}", arguments = listOf(navArgument("groupId") {
+                    "group/{groupId}",
+                    arguments = listOf(navArgument("groupId") {
                         type = NavType.IntType
                     })
                 ) { navBackStackEntry ->
                     GroupPage(
                         navBackStackEntry.arguments?.getInt("groupId")!!,
                         onBack = {
-                            navController.navigate("groups")
+                            navController.navigate("groups/{userId}")
                         },
                         onEditGroup = { groupId ->
                             navController.navigate("group_details?groupId=$groupId")
@@ -77,16 +81,20 @@ class MainActivity : ComponentActivity() {
                         },
                     )
                 }
+
                 composable(
-                    "group_details?groupId={groupId}", arguments = listOf(navArgument("groupId") {
+                    "group_details?groupId={groupId}",
+                    arguments = listOf(navArgument("groupId") {
                         nullable = true
                     })
                 ) { navBackStackEntry ->
                     GroupDetailsPage(
-                        navBackStackEntry.arguments?.getString("groupId"),
-                        onSave = { groupId ->
-                            navController.navigate("group/$groupId")
-                        },
+                        GroupDetailsPageProps(
+                            navBackStackEntry.arguments?.getString("groupId"),
+                            onSave = { groupId ->
+                                navController.navigate("group/$groupId")
+                            },
+                        )
                     )
                 }
                 composable(

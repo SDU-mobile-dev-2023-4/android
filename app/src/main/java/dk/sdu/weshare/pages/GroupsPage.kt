@@ -33,13 +33,14 @@ import dk.sdu.weshare.models.User
 
 @Composable
 fun GroupsPage(
+    userId: Int,
     onViewProfile: (Int) -> Unit,
     onViewGroup: (Int) -> Unit,
     onCreateGroup: () -> Unit,
 ) {
 
     var users = Users().getUsers()
-    val user = users[0]
+    val user = users.filter { user -> user.id == userId }[0]
 
     var groups = Groups().getGroups()
 
@@ -85,7 +86,7 @@ fun GroupsPage(
                             .clickable {
                                 onViewGroup(group.id)
                             }) {
-                        Text("Group ${group.name}", fontSize = 30.sp)
+                        Text("${group.name}", fontSize = 30.sp)
 
                         Icon(
                             imageVector = Icons.Outlined.KeyboardArrowRight,

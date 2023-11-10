@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.fakeValues.ProfilePageProps
 import dk.sdu.weshare.fakeValues.ProfilePagePropsProvider
+import dk.sdu.weshare.fakeValues.Users
 import dk.sdu.weshare.models.User
 import java.time.LocalDateTime
 
@@ -49,7 +50,10 @@ import java.time.LocalDateTime
 fun ProfilePage(
     @PreviewParameter(ProfilePagePropsProvider::class) props: ProfilePageProps
 ) {
-    val user = User(props.userId, "JAGO", "JAGO@jaffar.dk", LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), listOf(1,2,3))
+
+    var users = Users().getUsers()
+
+    val user = users[0]
 
     var name by remember { mutableStateOf(user.name) }
     var email by remember { mutableStateOf(user.email) }
