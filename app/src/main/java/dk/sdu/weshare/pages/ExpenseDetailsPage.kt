@@ -30,12 +30,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dk.sdu.weshare.fakeValues.ExpenseDetailsPageProps
-import dk.sdu.weshare.fakeValues.ExpenseDetailsPagePropsProvider
+import dk.sdu.weshare.fakeValues.Groups
 import dk.sdu.weshare.fakeValues.Users
+
+class ExpenseDetailsPagePropsProvider : PreviewParameterProvider<ExpenseDetailsPageProps> {
+    private val fakeValues = listOf(
+        ExpenseDetailsPageProps(1) {},
+    )
+    override val values = fakeValues.asSequence()
+    override val count: Int = values.count()
+}
+
+data class ExpenseDetailsPageProps(
+    val groupId: Int,
+    val onSave: () -> Unit,
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
@@ -44,16 +57,14 @@ fun ExpenseDetailsPage(
     @PreviewParameter(ExpenseDetailsPagePropsProvider::class) props: ExpenseDetailsPageProps
 ) {
 
-
-    val users = Users().getUsers()
-    val getUsersInSpecificGroups = users.filter { it.groupIds.contains(props.groupId) }
-    val possiblePayers = getUsersInSpecificGroups.map { it.name }
+    val group = Groups().getGroupById(props.groupId)!!
+    val groupMembers = Users().getUsers().filter { group.memberIds.contains(it.id) }
 
     var title by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
 
     var expanded by remember { mutableStateOf(false) }
-    var selectedPayer by remember { mutableStateOf(possiblePayers[0]) }
+    var selectedPayer by remember { mutableStateOf(groupMembers[0]) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -90,7 +101,7 @@ fun ExpenseDetailsPage(
                     .fillMaxWidth()
                     .padding(top = 16.dp),
                 readOnly = true,
-                value = selectedPayer,
+                value = selectedPayer.name,
                 onValueChange = {},
                 label = { Text("Payer") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -99,9 +110,9 @@ fun ExpenseDetailsPage(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
             ) {
-                possiblePayers.forEach { selectionOption ->
+                groupMembers.forEach { selectionOption ->
                     DropdownMenuItem(
-                        text = { Text(selectionOption) },
+                        text = { Text(selectionOption.name) },
                         onClick = {
                             selectedPayer = selectionOption
                             expanded = false

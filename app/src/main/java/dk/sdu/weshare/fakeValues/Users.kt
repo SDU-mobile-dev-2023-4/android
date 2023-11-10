@@ -3,27 +3,18 @@ package dk.sdu.weshare.fakeValues
 import dk.sdu.weshare.models.User
 
 class Users {
-
-	private val users = mutableListOf<User>()
-	private fun feedUsers() {
-		for (user in UserPagePropsProvider().values) {
-			val newUser = User(
-				user.id,
-				user.name,
-				user.email,
-				user.password,
-				user.emailVerifiedAt,
-				user.createdAt,
-				user.updatedAt,
-				user.groupIds,
+	fun getUsers() : List<User>{
+		return listOf(
+			User(
+				1,
+				"Bengt",
+				"bengt@live.dk",
+				"MegetSikkertPassword"
 			)
-			// Customize the new users's properties as needed
-			users.add(newUser)
-		}
-	}
-	fun getUsers() : MutableList<User>{
-		feedUsers()
-		return users
+		)
 	}
 
+	fun getUserByEmail(email: String): User? {
+		return getUsers().find { it.email == email }
+	}
 }

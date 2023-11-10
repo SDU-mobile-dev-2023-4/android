@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,14 +28,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.authentication.AuthUser
 
+class SignInPageFunctionProvider : PreviewParameterProvider<(Int) -> Unit> {
+    private val fakeValues: List<(Int) -> Unit> = listOf { }
+    override val values: Sequence<(Int) -> Unit> = fakeValues.asSequence()
+    override val count: Int = values.count()
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
 fun SignInPage(
-    onSignIn: (Int) -> Unit) {
+    @PreviewParameter(SignInPageFunctionProvider::class) onSignIn: (Int) -> Unit
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -80,7 +90,12 @@ fun SignInPage(
 
         Spacer(Modifier.size(48.dp))
         Button(
-            onClick = { onSignIn(AuthUser().login("$email", "$password"))},
+            onClick = {
+                val loggedInUser = AuthUser().login(email, password)
+                if (loggedInUser != null) {
+                    onSignIn(loggedInUser.id)
+                }
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,
                 contentColor = Color.Black
@@ -98,5 +113,3 @@ fun SignInPage(
 
     }
 }
-
-

@@ -23,27 +23,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dk.sdu.weshare.fakeValues.ProfilePageProps
-import dk.sdu.weshare.fakeValues.ProfilePagePropsProvider
 import dk.sdu.weshare.fakeValues.Users
-import dk.sdu.weshare.models.User
-import java.time.LocalDateTime
 
-//private val fakeValues = listOf(
-//    ProfilePageProps(1) { },
-//)
-//
-//class ProfilePagePropsProvider : PreviewParameterProvider<ProfilePageProps> {
-//    override val values = fakeValues.asSequence()
-//    override val count: Int = values.count()
-//}
-//
-//data class ProfilePageProps(
-//    val userId: Int,
-//    val onBack: () -> Unit,
-//)
+class ProfilePagePropsProvider : PreviewParameterProvider<ProfilePageProps> {
+    private val fakeValues = listOf(
+        ProfilePageProps(1) { },
+    )
+    override val values = fakeValues.asSequence()
+    override val count: Int = values.count()
+}
+
+data class ProfilePageProps(
+    val userId: Int,
+    val onBack: () -> Unit,
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
@@ -51,9 +48,7 @@ fun ProfilePage(
     @PreviewParameter(ProfilePagePropsProvider::class) props: ProfilePageProps
 ) {
 
-    var users = Users().getUsers()
-
-    val user = users[0]
+    val user = Users().getUsers().find { it.id == props.userId }!!
 
     var name by remember { mutableStateOf(user.name) }
     var email by remember { mutableStateOf(user.email) }

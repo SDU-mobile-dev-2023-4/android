@@ -23,26 +23,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.fakeValues.Groups
 
 import dk.sdu.weshare.fakeValues.Users
-import dk.sdu.weshare.models.Group
-import dk.sdu.weshare.models.User
+class GroupsPagePropsProvider : PreviewParameterProvider<GroupsPageProps> {
+    private val fakeValues = listOf(
+        GroupsPageProps(1, {}, {}, {}),
+    )
+    override val values = fakeValues.asSequence()
+    override val count: Int = values.count()
+}
+
+data class GroupsPageProps(
+    val userId: Int,
+    val onViewProfile: (Int) -> Unit,
+    val onViewGroup: (Int) -> Unit,
+    val onCreateGroup: () -> Unit,
+)
 
 @Composable
 fun GroupsPage(
-    userId: Int,
-    onViewProfile: (Int) -> Unit,
-    onViewGroup: (Int) -> Unit,
-    onCreateGroup: () -> Unit,
+    @PreviewParameter(GroupsPagePropsProvider::class) props: GroupsPageProps,
 ) {
 
-    var users = Users().getUsers()
-    val user = users.filter { user -> user.id == userId }[0]
+    val user = Users().getUsers().find { user -> user.id == props.userId }!!
 
-    var groups = Groups().getGroups()
+    val groups = Groups().getGroups()
 
     Column {
         Row(
@@ -55,14 +65,14 @@ fun GroupsPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable { onViewProfile(user.id) })
+                    .clickable { props.onViewProfile(user.id) })
             Text(user.name, fontSize = 30.sp)
             Icon(imageVector = Icons.TwoTone.Add,
                 contentDescription = "onCreateGroup",
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable { onCreateGroup() })
+                    .clickable { props.onCreateGroup() })
         }
 
         Column(
@@ -84,9 +94,9 @@ fun GroupsPage(
                             .border(1.dp, color = Color.Black)
                             .padding(start = 16.dp)
                             .clickable {
-                                onViewGroup(group.id)
+                                props.onViewGroup(group.id)
                             }) {
-                        Text("${group.name}", fontSize = 30.sp)
+                        Text(group.name, fontSize = 30.sp)
 
                         Icon(
                             imageVector = Icons.Outlined.KeyboardArrowRight,
