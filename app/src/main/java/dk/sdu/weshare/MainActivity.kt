@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import dk.sdu.weshare.pages.ExpenseDetailsPage
 import dk.sdu.weshare.pages.ExpenseDetailsPageProps
 import dk.sdu.weshare.pages.GroupDetailsPage
+import dk.sdu.weshare.pages.GroupDetailsPageProps
 import dk.sdu.weshare.pages.GroupPage
 import dk.sdu.weshare.pages.GroupsPage
 import dk.sdu.weshare.pages.ProfilePage
@@ -83,10 +84,12 @@ class MainActivity : ComponentActivity() {
                     })
                 ) { navBackStackEntry ->
                     GroupDetailsPage(
-                        navBackStackEntry.arguments?.getString("groupId"),
-                        onSave = { groupId ->
-                            navController.navigate("group/$groupId")
-                        },
+                        GroupDetailsPageProps(
+                            navBackStackEntry.arguments?.getString("groupId"),
+                            onSave = { groupId ->
+                                navController.navigate("group/$groupId")
+                            },
+                        )
                     )
                 }
                 composable(
