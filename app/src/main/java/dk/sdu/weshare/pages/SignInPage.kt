@@ -91,9 +91,15 @@ fun SignInPage(
         Spacer(Modifier.size(48.dp))
         Button(
             onClick = {
-                val loggedInUser = AuthUser().login(email, password)
-                if (loggedInUser != null) {
-                    onSignIn(loggedInUser.id)
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    println("Sign in button clicked")
+                    AuthUser().login(email, password){ loggedInUser ->
+                        if (loggedInUser != null) {
+                            println("User logged in" + loggedInUser.id)
+                            println("token: ${loggedInUser.token}")
+                            //Vi skal videre med onSignIn her
+                        }
+                    }
                 }
             },
             colors = ButtonDefaults.buttonColors(
