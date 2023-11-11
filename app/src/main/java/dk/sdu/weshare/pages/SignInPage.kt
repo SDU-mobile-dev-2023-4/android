@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.ui.theme.buttonGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,6 +55,7 @@ fun SignInPage(onSignIn: () -> Unit) {
             value = email,
             onValueChange = { email = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Email") },
+            singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
@@ -82,16 +85,12 @@ fun SignInPage(onSignIn: () -> Unit) {
         Button(
             onClick = onSignIn,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = Color.Black
+                containerColor = buttonGreen,
+                contentColor = Color.White
             ),
+            shape = RoundedCornerShape(8.dp),
             modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    BorderStroke(2.dp, Color.Black),
-                    CircleShape
-                )
-                .clip(CircleShape)) {
+                .fillMaxWidth()) {
             Text("Sign in", fontSize = 30.sp)
         }
     }
