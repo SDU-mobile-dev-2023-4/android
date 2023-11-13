@@ -10,13 +10,23 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,10 +79,13 @@ fun CalculationList(expenses: MutableList<Expense>) {
     for (i in 0 until payer.size) {
         owe.add(amountPrPers)
     }
+
+
     Column (
         modifier = Modifier
-        .padding(60.dp, 24.dp)
+        .padding(start = 60.dp, end = 60.dp)
         ) {
+
         Row() {
             Text(
                 text = "${payer.find { it.id == user.id }!!.name}:",
@@ -87,7 +100,9 @@ fun CalculationList(expenses: MutableList<Expense>) {
                     fontSize = 30.sp,
                     textAlign = TextAlign.End,
                     color = Color.Red,
-                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
                 )
             } else {
                 Text(
@@ -95,7 +110,9 @@ fun CalculationList(expenses: MutableList<Expense>) {
                     fontSize = 30.sp,
                     textAlign = TextAlign.End,
                     color = Color.Green,
-                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
                 )
             }
         }
@@ -108,7 +125,9 @@ fun CalculationList(expenses: MutableList<Expense>) {
             Text(text = "${total}",
                 textAlign = TextAlign.End,
                 fontSize = 30.sp,
-                modifier = Modifier.weight(1f).padding(end = 8.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
             )
         }
     }
@@ -129,8 +148,9 @@ fun ExpensesList(expenses: List<Expense>) {
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
+//                .fillMaxHeight()
                 .padding(32.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             expenses.forEach { expense ->
                 Row(
@@ -143,21 +163,22 @@ fun ExpensesList(expenses: List<Expense>) {
                 ) {
 
                     Text(text = payer.find { it.id == expense.payerId }!!.name,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .weight(1f))
+                            .weight(0.6f))
 
                     Text(text = expense.name,
-                        fontSize = 16.sp, textAlign = TextAlign.Start,
+                        fontSize = 20.sp, textAlign = TextAlign.Center,
                         modifier = Modifier.weight(1f))
 
                     Text(text = "${expense.price}",
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         textAlign = TextAlign.End,
                         modifier = Modifier
                             .padding(end = 8.dp)
-                            .weight(1f))
+                            .weight(0.6f)
+                    )
                 }
             }
         }
@@ -178,7 +199,21 @@ fun GroupPage(
     expensesList.add(Expense("Expense 4", 40000, Users().getRandomUser().id))
     expensesList.add(Expense("Expense 5", 50002, Users().getRandomUser().id))
     expensesList.add(Expense("Expense 6", 60020, Users().getRandomUser().id))
-    expensesList.add(Expense("Expense 7", 70090, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 7", 70090, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 8", 80000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 9", 90000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 10", 100000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 11", 110000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 12", 120000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 13", 130000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 14", 140000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 15", 150000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 16", 160000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 17", 170000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 18", 180000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 19", 190000, Users().getRandomUser().id))
+//    expensesList.add(Expense("Expense 20", 200000, Users().getRandomUser().id))
+
 
 
     val group = Groups().getGroups().find { it.id == props.groupId }!!
@@ -191,15 +226,35 @@ fun GroupPage(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(8.dp)
-            .clickable(onClick = { props.onEditGroup(props.groupId) })
-    ) {
-        Text( group.name, fontSize = 70.sp)
-//        Spacer(Modifier.size(30.dp))
+            .padding(16.dp)
 
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Spacer(modifier =Modifier.size(60.dp))
+            Text( group.name,
+                fontSize = 60.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .weight(1f)
+            )
+            Icon(
+                imageVector = Icons.Outlined.Edit,
+                contentDescription = "View Group ${group.name}",
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = { props.onEditGroup(props.groupId) })
+            )
+        }
+
+        Spacer(modifier = Modifier.size(30.dp))
         CalculationList(expensesList)
 
-//        Spacer(Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(30.dp))
         Button(onClick = { props.onAddExpense(props.groupId) },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.border(2.dp,
@@ -211,10 +266,13 @@ fun GroupPage(
                     containerColor = Color.Transparent
                 )
         ){
+
             Text("Add",
                 fontSize = 30.sp,
                 color = Color.Green)
         }
+
+        Spacer(modifier = Modifier.size(30.dp))
         // Integrate the ExpensesList Composable
         ExpensesList(expensesList)
     }
