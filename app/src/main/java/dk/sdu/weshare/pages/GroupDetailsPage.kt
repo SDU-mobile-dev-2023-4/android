@@ -60,11 +60,11 @@ data class GroupDetailsPageProps(
 fun GroupDetailsPage(
     @PreviewParameter(GroupDetailsPagePropsProvider::class) props: GroupDetailsPageProps,
 ) {
-    val group = Groups().getGroups().find { it.id == (props.groupId?.toInt() ?: -1) }!!
+    val group = Groups().getGroups().find { it.id == (props.groupId?.toInt() ?: -1) }
 
     var isDialogOpen by remember { mutableStateOf(false) }
-    var groupName by remember { mutableStateOf(group.name) }
-    var members by remember { mutableStateOf(group.members!!) }
+    var groupName by remember { mutableStateOf(group?.name ?: "") }
+    var members by remember { mutableStateOf(group?.members ?: listOf()) }
 
     if (isDialogOpen) {
         AddUserPopup(
@@ -90,14 +90,15 @@ fun GroupDetailsPage(
     ) {
         OutlinedTextField(
             value = groupName,
-            onValueChange = { groupName = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Name") },
+            onValueChange = { groupName = it },
+            singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Done
             ),
         )
 
