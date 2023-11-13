@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import dk.sdu.weshare.authentication.Auth
 import dk.sdu.weshare.pages.CreateExpensePage
 import dk.sdu.weshare.pages.CreateExpensePageProps
 import dk.sdu.weshare.pages.GroupDetailsPage
@@ -24,10 +25,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         setContent {
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = "sign_in") {
+            val user = Auth.user
+            val startPage = if (user == null) "sign_in" else "groups"
+
+            NavHost(navController = navController, startDestination = startPage) {
                 composable("sign_in") {
                     SignInPage { navController.navigate("groups") }
                 }
