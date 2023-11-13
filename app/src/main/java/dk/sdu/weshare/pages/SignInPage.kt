@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,6 +35,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.ui.theme.buttonGreen
 import dk.sdu.weshare.authentication.Auth
 
 class SignInPageFunctionProvider : PreviewParameterProvider<(Int) -> Unit> {
@@ -65,6 +68,7 @@ fun SignInPage(
             value = email,
             onValueChange = { email = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Email") },
+            singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
@@ -103,16 +107,12 @@ fun SignInPage(
                 }
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = Color.Black
+                containerColor = buttonGreen,
+                contentColor = Color.White
             ),
+            shape = RoundedCornerShape(8.dp),
             modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    BorderStroke(2.dp, Color.Black),
-                    CircleShape
-                )
-                .clip(CircleShape)) {
+                .fillMaxWidth()) {
             Text("Sign in", fontSize = 30.sp)
         }
 
