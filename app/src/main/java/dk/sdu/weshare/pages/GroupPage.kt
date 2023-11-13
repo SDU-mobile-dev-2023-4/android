@@ -71,7 +71,7 @@ fun CalculationList(expenses: MutableList<Expense>) {
     }
     Column (
         modifier = Modifier
-        .padding(42.dp)
+        .padding(60.dp, 24.dp)
         ) {
         Row() {
             Text(
@@ -202,7 +202,7 @@ fun GroupPage(
 //        Spacer(Modifier.size(16.dp))
         Button(onClick = { props.onAddExpense(props.groupId) },
             shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.border(1.dp,
+            modifier = Modifier.border(2.dp,
                 Color.Green,
                 shape = RoundedCornerShape(8.dp)),
             colors = ButtonDefaults
