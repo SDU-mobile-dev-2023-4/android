@@ -36,8 +36,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dk.sdu.weshare.fakeValues.Groups
-import dk.sdu.weshare.fakeValues.Users
+import dk.sdu.weshare.api.Api
+import dk.sdu.weshare.models.Group
 
 class GroupDetailsPagePropsProvider : PreviewParameterProvider<GroupDetailsPageProps> {
 
@@ -51,7 +51,7 @@ class GroupDetailsPagePropsProvider : PreviewParameterProvider<GroupDetailsPageP
 
 data class GroupDetailsPageProps(
     val groupId: String?,
-    val onSave: () -> Unit,
+    val onSave: (Group) -> Unit,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,21 +60,32 @@ data class GroupDetailsPageProps(
 fun GroupDetailsPage(
     @PreviewParameter(GroupDetailsPagePropsProvider::class) props: GroupDetailsPageProps,
 ) {
-    val group = Groups().getGroups().find { it.id == (props.groupId?.toInt() ?: -1) }
+    var group: Group? by remember { mutableStateOf(null) }
+    var groupName by remember { mutableStateOf(group?.name ?: "") }
+    if (props.groupId != null) {
+        Api.getGroup(props.groupId.toInt()) {
+            if (it != null) {
+                group = it
+//                groupName = it.name
+            } else {
+                println("Couldn't get group with id ${props.groupId}")
+            }
+        }
+    } else {
+        Api.createGroup("Unnamed group") {
+            group = it
+        }
+    }
 
     var isDialogOpen by remember { mutableStateOf(false) }
-    var groupName by remember { mutableStateOf(group?.name ?: "") }
-    var members by remember { mutableStateOf(group?.members ?: listOf()) }
 
     if (isDialogOpen) {
         AddUserPopup(
             onAddUser = { email ->
-                isDialogOpen = false
-                val user = Users().getUserByEmail(email)
-                if (user != null) {
-                    members += user
+                Api.addUserToGroup(group!!, email) {
+                    group = it
+                    isDialogOpen = false
                 }
-
             }, onDismiss = {
                 isDialogOpen = false
             }
@@ -126,7 +137,7 @@ fun GroupDetailsPage(
         }
 
         Column {
-            members.forEach { member ->
+            group?.members?.forEach { member ->
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -140,7 +151,15 @@ fun GroupDetailsPage(
         }
 
         Spacer(Modifier.weight(1f))
-        Button(onClick = props.onSave) {
+        Button(onClick = {
+            if (group != null) {
+                Api.updateGroup(group!!, groupName) {
+                    if (it != null) {
+                        props.onSave(it)
+                    }
+                }
+            }
+        }) {
             Text("Save", fontSize = 30.sp)
         }
     }

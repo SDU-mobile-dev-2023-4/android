@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
                         GroupDetailsPageProps(
                             navBackStackEntry.arguments?.getString("groupId"),
                             onSave = {
-                                navController.navigate("group/${navBackStackEntry.arguments?.getInt("groupId")!!}")
+                                navController.navigate("group/${it.id}")
                             },
                         )
                     )
