@@ -162,7 +162,7 @@ fun ExpensesList(group: Group) {
 fun GroupPage(
     @PreviewParameter(GroupPagePropsProvider::class) props: GroupPageProps
 ) {
-    var group: Group by remember { mutableStateOf(Group(-1, "Loading...", listOf(), listOf())) }
+    var group: Group? by remember { mutableStateOf(null) }
     Api.getGroup(props.groupId) {
         if (it != null) {
             group = it
@@ -183,8 +183,8 @@ fun GroupPage(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier =Modifier.size(60.dp))
-            Text( group.name,
+            Spacer(modifier = Modifier.size(60.dp))
+            Text( group?.name ?: "...",
                 fontSize = 60.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -192,7 +192,7 @@ fun GroupPage(
             )
             Icon(
                 imageVector = Icons.Outlined.Edit,
-                contentDescription = "View Group ${group.name}",
+                contentDescription = "View Group ${group?.name ?: "..."}",
                 modifier = Modifier
                     .size(60.dp)
                     .clickable(onClick = { props.onEditGroup(props.groupId) })
@@ -200,7 +200,7 @@ fun GroupPage(
         }
 
         Spacer(modifier = Modifier.size(30.dp))
-        CalculationList(group)
+        group?.let { CalculationList(it) }
 
         Spacer(modifier = Modifier.size(30.dp))
         Button(onClick = { props.onAddExpense(props.groupId) },
@@ -222,6 +222,6 @@ fun GroupPage(
 
         Spacer(modifier = Modifier.size(30.dp))
         // Integrate the ExpensesList Composable
-        ExpensesList(group)
+        group?.let { ExpensesList(it) }
     }
 }
