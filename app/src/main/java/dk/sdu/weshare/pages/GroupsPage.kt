@@ -18,6 +18,10 @@ import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,8 +31,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.api.Api
 import dk.sdu.weshare.authentication.Auth
-import dk.sdu.weshare.fakeValues.Groups
+import dk.sdu.weshare.models.Group
 
 class GroupsPagePropsProvider : PreviewParameterProvider<GroupsPageProps> {
     private val fakeValues = listOf(
@@ -50,7 +55,8 @@ fun GroupsPage(
 ) {
     val user = Auth.user!!
 
-    val groups = Groups().getGroups()
+    var groups: List<Group> by remember { mutableStateOf(listOf()) }
+    Api.getAllGroups { groups = it ?: listOf()}
 
     Column {
         Row(
@@ -63,7 +69,8 @@ fun GroupsPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable { props.onViewProfile(user.id) })
+                    .clickable { props.onViewProfile(user.id) }
+            )
             Text(user.name, fontSize = 30.sp)
             Icon(imageVector = Icons.TwoTone.Add,
                 contentDescription = "onCreateGroup",
