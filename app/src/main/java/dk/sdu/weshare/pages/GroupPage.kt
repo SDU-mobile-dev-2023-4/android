@@ -55,20 +55,19 @@ class GroupPagePropsProvider : PreviewParameterProvider<GroupPageProps> {
 @Composable
 fun CalculationList(group: Group) {
 
-    val totalSpent = group.expenses!!.sumOf { it.price }
-    //calculate total amount paid by user with id
-    val ourSpent = group.expenses.filter { it.payerId == Auth.user!!.id }.sumOf { it.price }
+    val totalExpenses = group.expenses!!.sumOf { it.price }
+    val ourExpenses = group.expenses
+        .filter { it.payerId == Auth.user!!.id } // only get our expenses
+        .sumOf { it.price }
 
-    //calculate the amount of money each member should to pay
-    val expectedSpent = totalSpent / group.members!!.size
+    // calculate the amount of money each member should pay
+    val expectedShare = totalExpenses / group.members!!.size
 
-    //calculate the amount of money the user owes
-    val surplus = ourSpent - expectedSpent
-
+    // calculate the amount of money the user owes
+    val surplus = ourExpenses - expectedShare
 
     Column (
-        modifier = Modifier
-        .padding(start = 60.dp, end = 60.dp)
+        modifier = Modifier.padding(start = 60.dp, end = 60.dp)
         ) {
 
         Row {
@@ -107,7 +106,7 @@ fun CalculationList(group: Group) {
                 fontSize = 30.sp,
                 modifier = Modifier.padding(start = 8.dp)
             )
-            Text(text = "$totalSpent",
+            Text(text = "$totalExpenses",
                 textAlign = TextAlign.End,
                 fontSize = 30.sp,
                 modifier = Modifier
