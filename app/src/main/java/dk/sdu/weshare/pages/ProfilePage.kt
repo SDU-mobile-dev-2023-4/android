@@ -75,8 +75,9 @@ fun ProfilePage(
         OutlinedTextField(
             email,
             onValueChange = { email = it.filter { c -> !c.isWhitespace() } },
-            label = { Text("Phone") },
-            modifier = Modifier.fillMaxWidth()
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth(),
+            readOnly = true
         )
         Spacer(Modifier.size(48.dp))
         Button(
