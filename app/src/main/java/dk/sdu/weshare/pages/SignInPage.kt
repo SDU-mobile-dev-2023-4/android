@@ -1,5 +1,6 @@
 package dk.sdu.weshare.pages
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,11 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.ui.theme.buttonGreen
 import dk.sdu.weshare.authentication.Auth
+import dk.sdu.weshare.authentication.Auth.Companion.user
+import dk.sdu.weshare.fakeValues.Users
 
 class SignInPageFunctionProvider : PreviewParameterProvider<(Int) -> Unit> {
     private val fakeValues: List<(Int) -> Unit> = listOf { }
@@ -45,8 +50,19 @@ class SignInPageFunctionProvider : PreviewParameterProvider<(Int) -> Unit> {
 fun SignInPage(
     @PreviewParameter(SignInPageFunctionProvider::class) onSignIn: () -> Unit
 ) {
+    var isDialogOpen by remember { mutableStateOf(false) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    if (isDialogOpen) {
+        RegisterUserPopup(
+            onRegisterUser = { email, name, password ->
+                isDialogOpen = false
+            }, onDismiss = {
+                isDialogOpen = false
+            }
+        )
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -110,7 +126,59 @@ fun SignInPage(
                 .fillMaxWidth()) {
             Text("Sign in", fontSize = 30.sp)
         }
-
-
+        Spacer(Modifier.size(48.dp))
+        Text(
+            "Register",
+            fontSize = 30.sp,
+            modifier = Modifier
+                .clickable { isDialogOpen = true }
+                .padding(start = 16.dp)
+        )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RegisterUserPopup(onRegisterUser: (email: String, name: String, password: String) -> Unit, onDismiss: () -> Unit)
+{
+    var email by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Add User") },
+
+        text = {
+            TextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text(text = "Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(Modifier.size(8.dp))
+            TextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text(text = "Name") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(Modifier.size(8.dp))
+            TextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text(text = "Password") },
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        confirmButton = {
+            Button(onClick = { onRegisterUser(email, name, password) }) {
+                Text(text = "Add")
+            }
+        },
+        dismissButton = {
+            Button(onClick = onDismiss) {
+                Text(text = "Cancel")
+            }
+        }
+    )
 }
