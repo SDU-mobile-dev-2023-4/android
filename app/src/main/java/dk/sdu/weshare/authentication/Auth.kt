@@ -1,6 +1,6 @@
 package dk.sdu.weshare.authentication
 
-import dk.sdu.weshare.api.ApiService
+import dk.sdu.weshare.api.Api
 import dk.sdu.weshare.models.User
 
 class Auth {
@@ -10,7 +10,7 @@ class Auth {
 	}
 
 	fun register(name: String, email: String, password: String, onResult: (User?) -> Unit) {
-		ApiService.register(name, email, password) {
+		Api.register(name, email, password) {
 			if (it != null) {
 				user = it
 			}
@@ -19,7 +19,7 @@ class Auth {
 	}
 
 	fun login(email: String, password: String, onResult: (User?) -> Unit) {
-		ApiService.login(email, password) {
+		Api.login(email, password) {
 			if (it != null) {
 				user = it
 			}
