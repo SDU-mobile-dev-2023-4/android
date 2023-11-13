@@ -27,19 +27,18 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.authentication.Auth
 import dk.sdu.weshare.fakeValues.Groups
 
-import dk.sdu.weshare.fakeValues.Users
 class GroupsPagePropsProvider : PreviewParameterProvider<GroupsPageProps> {
     private val fakeValues = listOf(
-        GroupsPageProps(1, {}, {}, {}),
+        GroupsPageProps({}, {}, {}),
     )
     override val values = fakeValues.asSequence()
     override val count: Int = values.count()
 }
 
 data class GroupsPageProps(
-    val userId: Int,
     val onViewProfile: (Int) -> Unit,
     val onViewGroup: (Int) -> Unit,
     val onCreateGroup: () -> Unit,
@@ -49,8 +48,7 @@ data class GroupsPageProps(
 fun GroupsPage(
     @PreviewParameter(GroupsPagePropsProvider::class) props: GroupsPageProps,
 ) {
-
-    val user = Users().getUsers().find { user -> user.id == props.userId }!!
+    val user = Auth.user!!
 
     val groups = Groups().getGroups()
 

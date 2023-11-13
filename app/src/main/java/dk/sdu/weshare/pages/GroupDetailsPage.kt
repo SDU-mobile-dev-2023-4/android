@@ -60,12 +60,11 @@ data class GroupDetailsPageProps(
 fun GroupDetailsPage(
     @PreviewParameter(GroupDetailsPagePropsProvider::class) props: GroupDetailsPageProps,
 ) {
-    val group = Groups().getGroups().find { it.id == (props.groupId?.toInt() ?: -1) }
-    val groupMembers = Users().getUsers().filter { user -> group?.memberIds?.contains(user.id) ?: false }
+    val group = Groups().getGroups().find { it.id == (props.groupId?.toInt() ?: -1) }!!
 
     var isDialogOpen by remember { mutableStateOf(false) }
-    var groupName by remember { mutableStateOf(group?.name ?: "") }
-    var members by remember { mutableStateOf(groupMembers) }
+    var groupName by remember { mutableStateOf(group.name) }
+    var members by remember { mutableStateOf(group.members!!) }
 
     if (isDialogOpen) {
         AddUserPopup(

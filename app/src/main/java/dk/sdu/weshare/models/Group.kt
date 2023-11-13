@@ -1,8 +1,11 @@
 package dk.sdu.weshare.models
 
+import com.google.gson.annotations.SerializedName
+
 
 data class Group(
-    val id: Int,
-    val name: String,
-    val memberIds: List<Int>,
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("users") val members: List<User>?,
+    @SerializedName("expenses") val expenses: List<Expense>?,
 )

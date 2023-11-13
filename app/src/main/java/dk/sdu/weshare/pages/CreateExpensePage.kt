@@ -34,18 +34,18 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.authentication.Auth
 import dk.sdu.weshare.fakeValues.Groups
-import dk.sdu.weshare.fakeValues.Users
 
-class ExpenseDetailsPagePropsProvider : PreviewParameterProvider<ExpenseDetailsPageProps> {
+class CreateExpensePagePropsProvider : PreviewParameterProvider<CreateExpensePageProps> {
     private val fakeValues = listOf(
-        ExpenseDetailsPageProps(1) {},
+        CreateExpensePageProps(1) {},
     )
     override val values = fakeValues.asSequence()
     override val count: Int = values.count()
 }
 
-data class ExpenseDetailsPageProps(
+data class CreateExpensePageProps(
     val groupId: Int,
     val onSave: () -> Unit,
 )
@@ -53,18 +53,16 @@ data class ExpenseDetailsPageProps(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun ExpenseDetailsPage(
-    @PreviewParameter(ExpenseDetailsPagePropsProvider::class) props: ExpenseDetailsPageProps
+fun CreateExpensePage(
+    @PreviewParameter(CreateExpensePagePropsProvider::class) props: CreateExpensePageProps
 ) {
-
     val group = Groups().getGroupById(props.groupId)!!
-    val groupMembers = Users().getUsers().filter { group.memberIds.contains(it.id) }
 
-    var title by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
 
     var expanded by remember { mutableStateOf(false) }
-    var selectedPayer by remember { mutableStateOf(groupMembers[0]) }
+    var selectedPayer by remember { mutableStateOf(group.members!!.find { it.id == Auth.user!!.id } ?: group.members[0]) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,9 +73,9 @@ fun ExpenseDetailsPage(
             .padding(48.dp)
     ) {
         OutlinedTextField(
-            title,
-            onValueChange = { title = it },
-            label = { Text("Title") },
+            name,
+            onValueChange = { name = it },
+            label = { Text("Name") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
@@ -110,7 +108,7 @@ fun ExpenseDetailsPage(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
             ) {
-                groupMembers.forEach { selectionOption ->
+                group.members!!.forEach { selectionOption ->
                     DropdownMenuItem(
                         text = { Text(selectionOption.name) },
                         onClick = {
@@ -124,13 +122,17 @@ fun ExpenseDetailsPage(
 
         Spacer(Modifier.size(48.dp))
         Button(
-            onClick = props.onSave, colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White, contentColor = Color.Black
-            ), modifier = Modifier
+            onClick = {
+                // TODO: write code to create the actual expense in the API
+                props.onSave()
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = Color.Black
+            ),
+            modifier = Modifier
                 .fillMaxWidth()
-                .border(
-                    BorderStroke(2.dp, Color.Black), CircleShape
-                )
+                .border(BorderStroke(2.dp, Color.Black), CircleShape)
                 .clip(RoundedCornerShape(5.dp))
         ) {
             Text("Save", fontSize = 30.sp)

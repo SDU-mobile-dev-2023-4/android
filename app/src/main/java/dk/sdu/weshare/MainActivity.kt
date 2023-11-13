@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import dk.sdu.weshare.pages.ExpenseDetailsPage
-import dk.sdu.weshare.pages.ExpenseDetailsPageProps
+import dk.sdu.weshare.pages.CreateExpensePage
+import dk.sdu.weshare.pages.CreateExpensePageProps
 import dk.sdu.weshare.pages.GroupDetailsPage
 import dk.sdu.weshare.pages.GroupDetailsPageProps
 import dk.sdu.weshare.pages.GroupPage
@@ -28,21 +28,14 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             NavHost(navController = navController, startDestination = "sign_in") {
-
                 composable("sign_in") {
-                    SignInPage(onSignIn = {userId:Int ->
-                        navController.navigate("groups/${userId}")
-                    })
+                    SignInPage { navController.navigate("groups") }
                 }
-                composable(
-                        "groups/{userId}",
-                        arguments = listOf(navArgument("userId") { type = NavType.IntType })
-                ) { navBackStackEntry ->
+                composable("groups") {
                     GroupsPage(
                         GroupsPageProps(
-                            userId = navBackStackEntry.arguments!!.getInt("userId"),
-                            onViewProfile = { userId: Int ->
-                                navController.navigate("profile/$userId")
+                            onViewProfile = {
+                                navController.navigate("profile")
                             },
                             onViewGroup = { groupId: Int ->
                                 navController.navigate("group/$groupId")
@@ -52,38 +45,29 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     )
-
                 }
-                composable(
-                    "profile/{userId}",
-                    arguments = listOf(navArgument("userId") { type = NavType.IntType })
-                ) { navBackStackEntry ->
+                composable("profile") {
                     ProfilePage(
-                        ProfilePageProps(
-                            navBackStackEntry.arguments?.getInt("userId")!!,
-                            onBack = {
-                                navController.navigate("groups/${navBackStackEntry.arguments?.getInt("userId")!!}")
-                            },
-                        )
+                        ProfilePageProps {
+                            navController.navigate("groups")
+                        }
                     )
                 }
                 composable(
                     "group/{groupId}",
-                    arguments = listOf(navArgument("groupId") {
-                        type = NavType.IntType
-                    })
+                    arguments = listOf(navArgument("groupId") { type = NavType.IntType })
                 ) { navBackStackEntry ->
                     GroupPage(
                         GroupPageProps(
                             navBackStackEntry.arguments?.getInt("groupId")!!,
                             onBack = {
-                                navController.navigate("groups/1")
+                                navController.navigate("groups")
                             },
                             onEditGroup = { groupId ->
                                 navController.navigate("group_details?groupId=$groupId")
                             },
                             onAddExpense = { groupId ->
-                                navController.navigate("expense_details/$groupId")
+                                navController.navigate("create_expense/$groupId")
                             },
                         )
                     )
@@ -105,14 +89,14 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable(
-                    "expense_details/{groupId}", arguments = listOf(
+                    "create_expense/{groupId}", arguments = listOf(
                         navArgument("groupId") {
                             type = NavType.IntType
                         },
                     )
                 ) { navBackStackEntry ->
-                    ExpenseDetailsPage(
-                        ExpenseDetailsPageProps(
+                    CreateExpensePage(
+                        CreateExpensePageProps(
                             navBackStackEntry.arguments?.getInt("groupId")!!,
                             onSave = { navController.navigate("group/${navBackStackEntry.arguments?.getInt("groupId")!!}") },
                         )

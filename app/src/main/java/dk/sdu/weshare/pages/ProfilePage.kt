@@ -26,18 +26,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dk.sdu.weshare.fakeValues.Users
+import dk.sdu.weshare.authentication.Auth
 
 class ProfilePagePropsProvider : PreviewParameterProvider<ProfilePageProps> {
     private val fakeValues = listOf(
-        ProfilePageProps(1) { },
+        ProfilePageProps { },
     )
     override val values = fakeValues.asSequence()
     override val count: Int = values.count()
 }
 
 data class ProfilePageProps(
-    val userId: Int,
     val onBack: () -> Unit,
 )
 
@@ -48,7 +47,7 @@ fun ProfilePage(
     @PreviewParameter(ProfilePagePropsProvider::class) props: ProfilePageProps
 ) {
 
-    val user = Users().getUsers().find { it.id == props.userId }!!
+    val user = Auth.user!!
 
     var name by remember { mutableStateOf(user.name) }
     var email by remember { mutableStateOf(user.email) }

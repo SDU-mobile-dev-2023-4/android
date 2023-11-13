@@ -3,7 +3,7 @@ package dk.sdu.weshare.fakeValues
 import dk.sdu.weshare.models.User
 
 class Users {
-	fun getUsers() : List<User>{
+	fun getUsers(): List<User>{
 		return listOf(
 			User(
 				1,
@@ -12,6 +12,10 @@ class Users {
 				"MegetSikkertPassword"
 			)
 		)
+	}
+
+	fun getRandomUser(): User {
+		return getUsers().random()
 	}
 
 	fun getUserByEmail(email: String): User? {

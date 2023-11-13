@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dk.sdu.weshare.authentication.AuthUser
+import dk.sdu.weshare.authentication.Auth
 
 class SignInPageFunctionProvider : PreviewParameterProvider<(Int) -> Unit> {
     private val fakeValues: List<(Int) -> Unit> = listOf { }
@@ -45,7 +45,7 @@ class SignInPageFunctionProvider : PreviewParameterProvider<(Int) -> Unit> {
 @Preview(showBackground = true)
 @Composable
 fun SignInPage(
-    @PreviewParameter(SignInPageFunctionProvider::class) onSignIn: (Int) -> Unit
+    @PreviewParameter(SignInPageFunctionProvider::class) onSignIn: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -91,13 +91,13 @@ fun SignInPage(
         Spacer(Modifier.size(48.dp))
         Button(
             onClick = {
-                if (!email.isEmpty() && !password.isEmpty()) {
+                if (email.isNotEmpty() && password.isNotEmpty()) {
                     println("Sign in button clicked")
-                    AuthUser().login(email, password){ loggedInUser ->
+                    Auth().login(email, password) { loggedInUser ->
                         if (loggedInUser != null) {
-                            println("User logged in" + loggedInUser.id)
+                            println("User ${loggedInUser.id} logged in")
                             println("token: ${loggedInUser.token}")
-                            //Vi skal videre med onSignIn her
+                            onSignIn()
                         }
                     }
                 }

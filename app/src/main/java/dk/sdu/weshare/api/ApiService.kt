@@ -1,15 +1,15 @@
 package dk.sdu.weshare.api
 
-import dk.sdu.weshare.data.LoginRequest
-import dk.sdu.weshare.data.User
+import dk.sdu.weshare.models.LoginCredentials
+import dk.sdu.weshare.models.User
 import dk.sdu.weshare.util.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RestApiService {
-	fun login(loginRequest: LoginRequest, onResult: (User?) -> Unit): User? {
-		val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+class ApiService {
+	fun login(loginRequest: LoginCredentials, onResult: (User?) -> Unit) {
+		val retrofit = ServiceBuilder.buildService(Api::class.java)
 		retrofit.login(loginRequest).enqueue(
 			object : Callback<User> {
 				override fun onFailure(call: Call<User>, t: Throwable) {
@@ -21,7 +21,5 @@ class RestApiService {
 				}
 			}
 		)
-		return null
 	}
-
 }
