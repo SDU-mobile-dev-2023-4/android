@@ -11,22 +11,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,9 +33,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dk.sdu.weshare.fakeValues.Groups
-import dk.sdu.weshare.fakeValues.Users
-import dk.sdu.weshare.models.Expense
+import dk.sdu.weshare.api.Api
+import dk.sdu.weshare.authentication.Auth
+import dk.sdu.weshare.models.Group
 
 data class GroupPageProps(
     val groupId: Int,
@@ -54,31 +53,17 @@ class GroupPagePropsProvider : PreviewParameterProvider<GroupPageProps> {
 }
 
 @Composable
-fun CalculationList(expenses: MutableList<Expense>) {
+fun CalculationList(group: Group) {
 
-    //call api to get users of the group
-    val payer = Users().getUsers()
+    val totalSpent = group.expenses!!.sumOf { it.price }
+    //calculate total amount paid by user with id
+    val ourSpent = group.expenses.filter { it.payerId == Auth.user!!.id }.sumOf { it.price }
 
-    //call api to get user
-    val user = Users().getRandomUser()
+    //calculate the amount of money each member should to pay
+    val expectedSpent = totalSpent / group.members!!.size
 
-    // calculate total amount of money used
-    var total = 0
-    expenses.forEach { expense ->
-        total += expense.price
-    }
-
-    //calculate total amount payed by user with id
-    val payed = expenses.filter { it.payerId == user.id }.sumOf { it.price }
-
-    //calculate the amount of money each person has to pay
-    val amountPrPers = total / payer.size
-
-    //calculate the amount of money user owe
-    val owe = mutableListOf<Int>()
-    for (i in 0 until payer.size) {
-        owe.add(amountPrPers)
-    }
+    //calculate the amount of money the user owes
+    val surplus = ourSpent - expectedSpent
 
 
     Column (
@@ -86,17 +71,17 @@ fun CalculationList(expenses: MutableList<Expense>) {
         .padding(start = 60.dp, end = 60.dp)
         ) {
 
-        Row() {
+        Row {
             Text(
-                text = "${payer.find { it.id == user.id }!!.name}:",
+                text = "${Auth.user!!.name}:",
                 fontSize = 30.sp,
                 modifier = Modifier.padding(start = 8.dp)
             )
 
             //show how much the user either ows or is owed
-            if (payed > owe[0]) {
+            if (surplus < 0) {
                 Text(
-                    text =  "${(payed - owe[0])}",
+                    text = "$surplus",
                     fontSize = 30.sp,
                     textAlign = TextAlign.End,
                     color = Color.Red,
@@ -106,7 +91,7 @@ fun CalculationList(expenses: MutableList<Expense>) {
                 )
             } else {
                 Text(
-                    text =  "${(owe[0] - payed)}",
+                    text =  "$surplus",
                     fontSize = 30.sp,
                     textAlign = TextAlign.End,
                     color = Color.Green,
@@ -122,7 +107,7 @@ fun CalculationList(expenses: MutableList<Expense>) {
                 fontSize = 30.sp,
                 modifier = Modifier.padding(start = 8.dp)
             )
-            Text(text = "${total}",
+            Text(text = "$totalSpent",
                 textAlign = TextAlign.End,
                 fontSize = 30.sp,
                 modifier = Modifier
@@ -134,55 +119,43 @@ fun CalculationList(expenses: MutableList<Expense>) {
 }
 
 @Composable
-fun ExpensesList(expenses: List<Expense>) {
-
-    Column(
+fun ExpensesList(group: Group) {
+    Column (
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(32.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        val payer = Users().getUsers()
-
-        // Display each expense in the list
-        Column (
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Top,
-            modifier = Modifier
-                .fillMaxWidth()
-//                .fillMaxHeight()
-                .padding(32.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            expenses.forEach { expense ->
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+        group.expenses!!.forEach { expense ->
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, color = Color.Black)
+                    .padding(all = 4.dp)
+            ) {
+                Text(text = group.members!!.find { it.id == expense.payerId }?.name ?: "Unknown user",
+                    fontSize = 20.sp,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .border(1.dp, color = Color.Black)
-                        .padding(all = 4.dp)
-                ) {
+                        .padding(start = 8.dp)
+                        .weight(0.6f))
 
-                    Text(text = payer.find { it.id == expense.payerId }!!.name,
-                        fontSize = 20.sp,
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .weight(0.6f))
+                Text(text = expense.name,
+                    fontSize = 20.sp, textAlign = TextAlign.Center,
+                    modifier = Modifier.weight(1f))
 
-                    Text(text = expense.name,
-                        fontSize = 20.sp, textAlign = TextAlign.Center,
-                        modifier = Modifier.weight(1f))
-
-                    Text(text = "${expense.price}",
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.End,
-                        modifier = Modifier
-                            .padding(end = 8.dp)
-                            .weight(0.6f)
-                    )
-                }
+                Text(text = "${expense.price}",
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .weight(0.6f)
+                )
             }
         }
-
     }
 }
 @Preview(showBackground = true)
@@ -190,37 +163,14 @@ fun ExpensesList(expenses: List<Expense>) {
 fun GroupPage(
     @PreviewParameter(GroupPagePropsProvider::class) props: GroupPageProps
 ) {
+    var group: Group by remember { mutableStateOf(Group(-1, "Loading...", listOf(), listOf())) }
+    Api.getGroup(props.groupId) {
+        if (it != null) {
+            group = it
+        }
+    }
 
-    // Sample list of expenses
-    val expensesList = mutableListOf<Expense>()
-    expensesList.add(Expense("Expense 1", 12121, Users().getRandomUser().id))
-    expensesList.add(Expense("Expense 2", 23320, Users().getRandomUser().id))
-    expensesList.add(Expense("Expense 3", 34052, Users().getRandomUser().id))
-    expensesList.add(Expense("Expense 4", 40000, Users().getRandomUser().id))
-    expensesList.add(Expense("Expense 5", 50002, Users().getRandomUser().id))
-    expensesList.add(Expense("Expense 6", 60020, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 7", 70090, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 8", 80000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 9", 90000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 10", 100000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 11", 110000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 12", 120000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 13", 130000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 14", 140000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 15", 150000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 16", 160000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 17", 170000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 18", 180000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 19", 190000, Users().getRandomUser().id))
-//    expensesList.add(Expense("Expense 20", 200000, Users().getRandomUser().id))
-
-
-
-    val group = Groups().getGroups().find { it.id == props.groupId }!!
-
-    group.name
-
-    return Column(
+    Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -251,7 +201,7 @@ fun GroupPage(
         }
 
         Spacer(modifier = Modifier.size(30.dp))
-        CalculationList(expensesList)
+        CalculationList(group)
 
         Spacer(modifier = Modifier.size(30.dp))
         Button(onClick = { props.onAddExpense(props.groupId) },
@@ -273,7 +223,6 @@ fun GroupPage(
 
         Spacer(modifier = Modifier.size(30.dp))
         // Integrate the ExpensesList Composable
-        ExpensesList(expensesList)
+        ExpensesList(group)
     }
 }
-
