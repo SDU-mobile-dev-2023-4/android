@@ -1,6 +1,5 @@
 package dk.sdu.weshare.pages
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,40 +33,48 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-private val fakeValues = listOf(
-    GroupDetailsPageProps(null) { },
-    GroupDetailsPageProps("1") { },
-)
+import dk.sdu.weshare.fakeValues.Groups
+import dk.sdu.weshare.fakeValues.Users
 
 class GroupDetailsPagePropsProvider : PreviewParameterProvider<GroupDetailsPageProps> {
+
+    private val fakeValues = listOf(
+        GroupDetailsPageProps(null) { },
+        GroupDetailsPageProps("1") { },
+    )
     override val values = fakeValues.asSequence()
     override val count: Int = values.count()
 }
 
 data class GroupDetailsPageProps(
     val groupId: String?,
-    val onSave: (Int) -> Unit,
+    val onSave: () -> Unit,
 )
 
-@SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun GroupDetailsPage(
-    @PreviewParameter(GroupDetailsPagePropsProvider::class) props: GroupDetailsPageProps
+    @PreviewParameter(GroupDetailsPagePropsProvider::class) props: GroupDetailsPageProps,
 ) {
+    val group = Groups().getGroups().find { it.id == (props.groupId?.toInt() ?: -1) }
+
     var isDialogOpen by remember { mutableStateOf(false) }
-    var groupName by remember { mutableStateOf("") }
-    var members by remember { mutableStateOf(listOf<String>()) }
+    var groupName by remember { mutableStateOf(group?.name ?: "") }
+    var members by remember { mutableStateOf(group?.members ?: listOf()) }
 
     if (isDialogOpen) {
         AddUserPopup(
             onAddUser = { email ->
-                members += email
                 isDialogOpen = false
+                val user = Users().getUserByEmail(email)
+                if (user != null) {
+                    members += user
+                }
+
             }, onDismiss = {
                 isDialogOpen = false
             }
@@ -83,14 +90,15 @@ fun GroupDetailsPage(
     ) {
         OutlinedTextField(
             value = groupName,
-            onValueChange = { groupName = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Name") },
+            onValueChange = { groupName = it },
+            singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Done
             ),
         )
 
@@ -126,13 +134,13 @@ fun GroupDetailsPage(
                         .fillMaxWidth()
                         .padding(top = 16.dp)
                 ) {
-                    Text(member, fontSize = 30.sp)
+                    Text(member.email, fontSize = 30.sp)
                 }
             }
         }
 
         Spacer(Modifier.weight(1f))
-        Button(onClick = { props.onSave(props.groupId?.toInt() ?: 69) }) {
+        Button(onClick = props.onSave) {
             Text("Save", fontSize = 30.sp)
         }
     }

@@ -31,38 +31,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.authentication.Auth
+import dk.sdu.weshare.fakeValues.Groups
 
-private val fakeValues = listOf(
-    ExpenseDetailsPageProps(1, null) { },
-//    ExpenseDetailsPageProps(1, "2") { },
-)
-
-class ExpenseDetailsPagePropsProvider : PreviewParameterProvider<ExpenseDetailsPageProps> {
+class CreateExpensePagePropsProvider : PreviewParameterProvider<CreateExpensePageProps> {
+    private val fakeValues = listOf(
+        CreateExpensePageProps(1) {},
+    )
     override val values = fakeValues.asSequence()
     override val count: Int = values.count()
 }
 
-data class ExpenseDetailsPageProps(
+data class CreateExpensePageProps(
     val groupId: Int,
-    val expenseId: String?,
     val onSave: () -> Unit,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun ExpenseDetailsPage(
-    @PreviewParameter(ExpenseDetailsPagePropsProvider::class) props: ExpenseDetailsPageProps
+fun CreateExpensePage(
+    @PreviewParameter(CreateExpensePagePropsProvider::class) props: CreateExpensePageProps
 ) {
-    val possiblePayers = listOf("Jakob", "Jon", "Michael")
+    val group = Groups().getGroupById(props.groupId)!!
 
-    var title by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
 
     var expanded by remember { mutableStateOf(false) }
-    var selectedPayer by remember { mutableStateOf(possiblePayers[0]) }
+    var selectedPayer by remember { mutableStateOf(group.members!!.find { it.id == Auth.user!!.id } ?: group.members[0]) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,9 +73,9 @@ fun ExpenseDetailsPage(
             .padding(48.dp)
     ) {
         OutlinedTextField(
-            title,
-            onValueChange = { title = it },
-            label = { Text("Title") },
+            name,
+            onValueChange = { name = it },
+            label = { Text("Name") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
@@ -99,7 +99,7 @@ fun ExpenseDetailsPage(
                     .fillMaxWidth()
                     .padding(top = 16.dp),
                 readOnly = true,
-                value = selectedPayer,
+                value = selectedPayer.name,
                 onValueChange = {},
                 label = { Text("Payer") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -108,9 +108,9 @@ fun ExpenseDetailsPage(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
             ) {
-                possiblePayers.forEach { selectionOption ->
+                group.members!!.forEach { selectionOption ->
                     DropdownMenuItem(
-                        text = { Text(selectionOption) },
+                        text = { Text(selectionOption.name) },
                         onClick = {
                             selectedPayer = selectionOption
                             expanded = false
@@ -122,13 +122,17 @@ fun ExpenseDetailsPage(
 
         Spacer(Modifier.size(48.dp))
         Button(
-            onClick = props.onSave, colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White, contentColor = Color.Black
-            ), modifier = Modifier
+            onClick = {
+                // TODO: write code to create the actual expense in the API
+                props.onSave()
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = Color.Black
+            ),
+            modifier = Modifier
                 .fillMaxWidth()
-                .border(
-                    BorderStroke(2.dp, Color.Black), CircleShape
-                )
+                .border(BorderStroke(2.dp, Color.Black), CircleShape)
                 .clip(RoundedCornerShape(5.dp))
         ) {
             Text("Save", fontSize = 30.sp)
