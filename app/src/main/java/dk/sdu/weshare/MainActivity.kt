@@ -19,6 +19,7 @@ import dk.sdu.weshare.pages.GroupsPage
 import dk.sdu.weshare.pages.GroupsPageProps
 import dk.sdu.weshare.pages.ProfilePage
 import dk.sdu.weshare.pages.ProfilePageProps
+import dk.sdu.weshare.pages.RegisterPage
 import dk.sdu.weshare.pages.SignInPage
 
 class MainActivity : ComponentActivity() {
@@ -35,7 +36,10 @@ class MainActivity : ComponentActivity() {
 
             NavHost(navController = navController, startDestination = startPage) {
                 composable("sign_in") {
-                    SignInPage { navController.navigate("groups") }
+                    SignInPage(navController = navController) { navController.navigate("groups") }
+                }
+                composable("register") {
+                    RegisterPage(navController = navController) { navController.navigate("groups") }
                 }
                 composable("groups") {
                     GroupsPage(
