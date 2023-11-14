@@ -25,25 +25,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import dk.sdu.weshare.ui.theme.buttonGreen
 import dk.sdu.weshare.authentication.Auth
 
-class SignInPageFunctionProvider : PreviewParameterProvider<(Int) -> Unit> {
-    private val fakeValues: List<(Int) -> Unit> = listOf { }
-    override val values: Sequence<(Int) -> Unit> = fakeValues.asSequence()
-    override val count: Int = values.count()
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
 fun SignInPage(
-    @PreviewParameter(SignInPageFunctionProvider::class) onSignIn: () -> Unit
+    navController: NavController, // Add NavController parameter
+    onSignIn: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -94,8 +87,6 @@ fun SignInPage(
                     println("Sign in button clicked")
                     Auth().login(email, password) { loggedInUser ->
                         if (loggedInUser != null) {
-                            println("User ${loggedInUser.id} logged in")
-                            println("token: ${loggedInUser.token}")
                             onSignIn()
                         }
                     }
@@ -110,7 +101,22 @@ fun SignInPage(
                 .fillMaxWidth()) {
             Text("Sign in", fontSize = 30.sp)
         }
-
-
+        Spacer(Modifier.size(16.dp))
+        // Add the Register button here
+        Button(
+            onClick = {
+                // Navigate to the "register" destination
+                navController.navigate("register")
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = buttonGreen,
+                contentColor = Color.White
+            ),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text("Register", fontSize = 30.sp)
+        }
     }
 }
