@@ -24,6 +24,11 @@ class Api {
 			}
 		}
 
+		fun addExpenseToGroup(group: Group, expense: Expense, onResult: (Group?) -> Unit) {
+			retrofit
+				.addExpenseToGroup(group.id, expense)
+				.enqueue(simpleCallback(onResult))
+		}
 		fun addExpenseToGroup(groupId: Int, expense: Expense, onResult: (Group?) -> Unit) {
 			retrofit
 				.addExpenseToGroup(groupId, expense)
