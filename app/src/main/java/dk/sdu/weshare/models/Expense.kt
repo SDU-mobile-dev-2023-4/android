@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class Expense(
-    @SerializedName("payee_id") val payerId: Int,
+    @SerializedName("payer_id") val payerId: Int,
     @SerializedName("name") val name: String,
     @SerializedName("price") val price: Int,
 )
