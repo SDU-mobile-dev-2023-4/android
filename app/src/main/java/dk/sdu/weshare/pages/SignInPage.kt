@@ -1,7 +1,9 @@
 package dk.sdu.weshare.pages
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -103,20 +105,15 @@ fun SignInPage(
         }
         Spacer(Modifier.size(16.dp))
         // Add the Register button here
-        Button(
-            onClick = {
-                // Navigate to the "register" destination
-                navController.navigate("register")
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = buttonGreen,
-                contentColor = Color.White
-            ),
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text("Register", fontSize = 30.sp)
+        Row {
+            Text(text = "Don't have an account?")
+            Spacer(Modifier.size(4.dp))
+            Text(text = "Register", color = buttonGreen, modifier = Modifier
+                .padding(start = 4.dp)
+                .clickable {
+                    navController.navigate("register")
+                }
+            )
         }
     }
 }

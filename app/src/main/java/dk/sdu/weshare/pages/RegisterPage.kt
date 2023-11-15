@@ -1,7 +1,9 @@
 package dk.sdu.weshare.pages
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,6 +52,7 @@ fun RegisterPage(
 			.padding(48.dp)) {
 		Text("UOMI", fontSize = 70.sp)
 		Spacer(Modifier.size(48.dp))
+
 
 		OutlinedTextField(
 			value = name,
@@ -117,22 +120,15 @@ fun RegisterPage(
 		}
 
 		Spacer(Modifier.size(16.dp))
-		Button(
-			onClick = {
-					  //navigate to login page
-					  navController.navigate("sign_in")
-
-			},
-			colors = ButtonDefaults.buttonColors(
-				containerColor = buttonGreen,
-				contentColor = Color.White
-			),
-			shape = RoundedCornerShape(8.dp),
-			modifier = Modifier
-				.fillMaxWidth()) {
-			Text("Login", fontSize = 30.sp)
+		Row {
+			Text(text = "Already have an account?")
+			Spacer(Modifier.size(4.dp))
+			Text(text = "Sign in", color = buttonGreen, modifier = Modifier
+				.padding(start = 4.dp)
+				.clickable {
+					navController.navigate("sign_in")
+				}
+			)
 		}
-
-
 	}
 }
