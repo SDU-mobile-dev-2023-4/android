@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
@@ -79,17 +81,21 @@ fun GroupsPage(
                     .clip(CircleShape)
                     .clickable { props.onCreateGroup() })
         }
-
+        Spacer(Modifier.size(32.dp))
+        Text("Groups",
+            fontSize = 36.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 16.dp))
         Column(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
-                .padding(32.dp)
+                .padding(16.dp)
                 .fillMaxWidth()
                 .fillMaxHeight()
+                .verticalScroll(rememberScrollState())
         ) {
-            Text("Groups", fontSize = 36.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.size(16.dp))
+
             Column {
                 groups.forEach { group ->
                     Row(horizontalArrangement = Arrangement.SpaceBetween,
