@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -27,38 +29,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
 import dk.sdu.weshare.models.Group
 
-class GroupDetailsPagePropsProvider : PreviewParameterProvider<GroupDetailsPageProps> {
-
-    private val fakeValues = listOf(
-        GroupDetailsPageProps(null) { },
-        GroupDetailsPageProps("1") { },
-    )
-    override val values = fakeValues.asSequence()
-    override val count: Int = values.count()
-}
-
 data class GroupDetailsPageProps(
     val groupId: String?,
     val onSave: (Group) -> Unit,
+    val onBack: () -> Unit,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
 fun GroupDetailsPage(
-    @PreviewParameter(GroupDetailsPagePropsProvider::class) props: GroupDetailsPageProps,
+    props: GroupDetailsPageProps
 ) {
     var group: Group? by remember { mutableStateOf(null) }
     var groupName by remember { mutableStateOf(group?.name ?: "") }
@@ -91,6 +81,14 @@ fun GroupDetailsPage(
             }
         )
     }
+    Icon(imageVector = Icons.Outlined.ArrowBack,
+        contentDescription = "back",
+        modifier = Modifier
+            .size(60.dp)
+            .clip(CircleShape)
+            .clickable { props.onBack() }
+    )
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,

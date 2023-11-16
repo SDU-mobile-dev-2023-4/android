@@ -95,6 +95,9 @@ class MainActivity : ComponentActivity() {
                             onSave = {
                                 navController.navigate("group/${it.id}")
                             },
+                            onBack = {
+                                navController.navigate("groups")
+                            }
                         )
                     )
                 }
