@@ -22,6 +22,7 @@ class Api {
 		private fun <T> simpleCallback(onResult: (T?) -> Unit): Callback<T> {
 			return object : Callback<T> {
 				override fun onFailure(call: Call<T>, t: Throwable) {
+					println("An error occurred: ${t.message}")
 					onResult(null)
 				}
 
