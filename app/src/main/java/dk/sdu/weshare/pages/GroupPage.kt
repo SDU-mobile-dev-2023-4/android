@@ -11,10 +11,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -26,7 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,6 +53,43 @@ fun GroupPage(
             group = it
         }
     }
+//     adding a top bar
+    Column {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            //turn back to groups page
+            Icon(imageVector = Icons.Outlined.ArrowBack,
+                contentDescription = "back",
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(CircleShape)
+                    .weight(1f)
+                    .padding(start = 8.dp)
+                    .clickable { onBack() }
+            )
+            //Group name
+            Text( group?.name ?: "...",
+            fontSize = 32.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+//                .weight(1f)
+            )
+            // edit group
+            Icon(
+                imageVector = Icons.Outlined.Edit,
+                contentDescription = "View Group ${group?.name ?: "..."}",
+                modifier = Modifier
+                    .size(60.dp)
+                    .weight(1f)
+                    .padding(end = 8.dp)
+                    .clickable(onClick = { onEditGroup(groupId) })
+            )
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,7 +98,6 @@ fun GroupPage(
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(16.dp)
-
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -63,19 +105,6 @@ fun GroupPage(
             modifier = Modifier.fillMaxWidth()
         ) {
             Spacer(modifier = Modifier.size(60.dp))
-            Text( group?.name ?: "...",
-                fontSize = 60.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .weight(1f)
-            )
-            Icon(
-                imageVector = Icons.Outlined.Edit,
-                contentDescription = "View Group ${group?.name ?: "..."}",
-                modifier = Modifier
-                    .size(60.dp)
-                    .clickable(onClick = { onEditGroup(groupId) })
-            )
         }
 
         Spacer(modifier = Modifier.size(30.dp))
