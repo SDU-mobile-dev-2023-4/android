@@ -58,8 +58,10 @@ fun GroupDetailsPage(
         AddUserPopup(
             onAddUser = { email ->
                 Api.addUserToGroup(group!!, email) {
-                    group = it
-                    isDialogOpen = false
+                    if (it != null) {
+                        group = it
+                        isDialogOpen = false
+                    }
                 }
             }, onDismiss = {
                 isDialogOpen = false
