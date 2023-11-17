@@ -27,9 +27,7 @@ import dk.sdu.weshare.authentication.Auth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfilePage(
-   onBack: () -> Unit,
-) {
+fun ProfilePage(onSave: () -> Unit) {
 
     val user = Auth.user!!
 
@@ -65,7 +63,7 @@ fun ProfilePage(
         )
         Spacer(Modifier.size(48.dp))
         Button(
-            onClick = onBack, modifier = Modifier.fillMaxWidth()
+            onClick = onSave, modifier = Modifier.fillMaxWidth()
         ) {
             Text("Save", fontSize = 30.sp)
         }

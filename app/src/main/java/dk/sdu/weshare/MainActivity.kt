@@ -51,9 +51,9 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable("profile") {
-                    ProfilePage {
-                        navController.navigate("groups")
-                    }
+                    ProfilePage(
+                        onSave = { navController.popBackStack() }
+                    )
                 }
                 composable(
                     "group/{groupId}",
@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
                     GroupPage(
                         navBackStackEntry.arguments?.getInt("groupId")!!,
                         onBack = {
-                            navController.navigate("groups")
+                            navController.popBackStack()
                         },
                         onEditGroup = { groupId ->
                             navController.navigate("group/$groupId/edit")
@@ -78,9 +78,7 @@ class MainActivity : ComponentActivity() {
                 ) { navBackStackEntry ->
                     GroupDetailsPage(
                         navBackStackEntry.arguments?.getInt("groupId")!!,
-                        onSave = { groupId ->
-                            navController.navigate("group/$groupId")
-                        },
+                        onSave = { navController.popBackStack() },
                     )
                 }
                 composable(
@@ -89,7 +87,7 @@ class MainActivity : ComponentActivity() {
                 ) { navBackStackEntry ->
                     CreateExpensePage(
                         navBackStackEntry.arguments?.getInt("groupId")!!,
-                        onSave = { navController.navigate("group/${navBackStackEntry.arguments?.getInt("groupId")!!}") },
+                        onSave = { navController.popBackStack() },
                     )
                 }
             }

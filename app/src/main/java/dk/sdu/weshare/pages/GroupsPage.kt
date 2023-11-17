@@ -37,7 +37,7 @@ import dk.sdu.weshare.models.Group
 
 @Composable
 fun GroupsPage(
-    onViewProfile: (Int) -> Unit,
+    onViewProfile: () -> Unit,
     onViewGroup: (Int) -> Unit,
 ) {
     val user = Auth.user!!
@@ -56,7 +56,7 @@ fun GroupsPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable { onViewProfile(user.id) }
+                    .clickable { onViewProfile() }
             )
             Text(user.name, fontSize = 30.sp)
             Icon(imageVector = Icons.TwoTone.Add,
