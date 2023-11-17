@@ -1,5 +1,11 @@
 package dk.sdu.weshare.api
 
+import dk.sdu.weshare.api.requests.LoginRequest
+import dk.sdu.weshare.api.requests.RegisterRequest
+import dk.sdu.weshare.api.requests.AddUserToGroupRequest
+import dk.sdu.weshare.api.requests.CreateGroupRequest
+import dk.sdu.weshare.api.requests.RemoveUserFromGroupRequest
+import dk.sdu.weshare.api.requests.UpdateGroupRequest
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
 import dk.sdu.weshare.models.User
@@ -17,29 +23,29 @@ interface ApiEndpoints {
 	fun addExpenseToGroup(@Path("id") groupId: Int, @Body expense: Expense): Call<Group>
 
 	@POST("api/groups/{id}/users")
-	fun addUserToGroup(@Path("id") groupId: Int, @Query("email") userEmail: String): Call<Group>
+	fun addUserToGroup(@Path("id") groupId: Int, @Body request: AddUserToGroupRequest): Call<Group>
 
 	@DELETE("api/groups/{id}/users")
-	fun removeUserFromGroup(@Path("id") groupId: Int, @Query("email") userEmail: String): Call<Group>
+	fun removeUserFromGroup(@Path("id") groupId: Int, @Body request: RemoveUserFromGroupRequest): Call<Group>
 
 	@GET("api/groups/{id}")
 	fun getGroup(@Path("id") groupId: Int): Call<Group>
 
 	@PUT("api/groups/{id}")
-	fun updateGroup(@Path("id") groupId: Int, @Query("name") name: String): Call<Group>
+	fun updateGroup(@Path("id") groupId: Int, @Body request: UpdateGroupRequest): Call<Group>
 
 	@DELETE("api/groups/{id}")
-	fun deleteGroup(@Path("id") groupId: Int): Call<Error>
+	fun deleteGroup(@Path("id") groupId: Int): Call<Group>
 
 	@GET("api/groups")
 	fun getAllGroups(): Call<List<Group>>
 
 	@POST("api/groups")
-	fun createGroup(@Query("name") name: String): Call<Group>
+	fun createGroup(@Body request: CreateGroupRequest): Call<Group>
 
 	@POST("/api/register")
-	fun register(@Body userRegistration: UserRegistration): Call<User>
+	fun register(@Body userRegistration: RegisterRequest): Call<User>
 
 	@POST("/api/login")
-	fun login(@Body loginCredentials: LoginCredentials): Call<User>
+	fun login(@Body loginCredentials: LoginRequest): Call<User>
 }

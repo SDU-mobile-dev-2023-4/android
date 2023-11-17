@@ -1,5 +1,12 @@
 package dk.sdu.weshare.api
 
+import android.os.Build
+import dk.sdu.weshare.api.requests.AddUserToGroupRequest
+import dk.sdu.weshare.api.requests.CreateGroupRequest
+import dk.sdu.weshare.api.requests.LoginRequest
+import dk.sdu.weshare.api.requests.RegisterRequest
+import dk.sdu.weshare.api.requests.RemoveUserFromGroupRequest
+import dk.sdu.weshare.api.requests.UpdateGroupRequest
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
 import dk.sdu.weshare.models.User
@@ -37,43 +44,43 @@ class Api {
 
 		fun addUserToGroup(group: Group, user: User, onResult: (Group?) -> Unit) {
 			retrofit
-				.addUserToGroup(group.id, user.email)
+				.addUserToGroup(group.id, AddUserToGroupRequest(user.email))
 				.enqueue(simpleCallback(onResult))
 		}
 		fun addUserToGroup(group: Group, userEmail: String, onResult: (Group?) -> Unit) {
 			retrofit
-				.addUserToGroup(group.id, userEmail)
+				.addUserToGroup(group.id, AddUserToGroupRequest(userEmail))
 				.enqueue(simpleCallback(onResult))
 		}
 		fun addUserToGroup(groupId: Int, user: User, onResult: (Group?) -> Unit) {
 			retrofit
-				.addUserToGroup(groupId, user.email)
+				.addUserToGroup(groupId, AddUserToGroupRequest(user.email))
 				.enqueue(simpleCallback(onResult))
 		}
 		fun addUserToGroup(groupId: Int, userEmail: String, onResult: (Group?) -> Unit) {
 			retrofit
-				.addUserToGroup(groupId, userEmail)
+				.addUserToGroup(groupId, AddUserToGroupRequest(userEmail))
 				.enqueue(simpleCallback(onResult))
 		}
 
 		fun removeUserFromGroup(group: Group, user: User, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(group.id, user.email)
+				.removeUserFromGroup(group.id, RemoveUserFromGroupRequest(user.email))
 				.enqueue(simpleCallback(onResult))
 		}
 		fun removeUserFromGroup(group: Group, userEmail: String, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(group.id, userEmail)
+				.removeUserFromGroup(group.id, RemoveUserFromGroupRequest(userEmail))
 				.enqueue(simpleCallback(onResult))
 		}
 		fun removeUserFromGroup(groupId: Int, user: User, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(groupId, user.email)
+				.removeUserFromGroup(groupId, RemoveUserFromGroupRequest(user.email))
 				.enqueue(simpleCallback(onResult))
 		}
 		fun removeUserFromGroup(groupId: Int, userEmail: String, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(groupId, userEmail)
+				.removeUserFromGroup(groupId, RemoveUserFromGroupRequest(userEmail))
 				.enqueue(simpleCallback(onResult))
 		}
 
@@ -90,21 +97,21 @@ class Api {
 
 		fun updateGroup(group: Group, name: String, onResult: (Group?) -> Unit) {
 			retrofit
-				.updateGroup(group.id, name)
+				.updateGroup(group.id, UpdateGroupRequest(name))
 				.enqueue(simpleCallback(onResult))
 		}
 		fun updateGroup(groupId: Int, name: String, onResult: (Group?) -> Unit) {
 			retrofit
-				.updateGroup(groupId, name)
+				.updateGroup(groupId, UpdateGroupRequest(name))
 				.enqueue(simpleCallback(onResult))
 		}
 
-		fun deleteGroup(group: Group, onResult: (Error?) -> Unit) {
+		fun deleteGroup(group: Group, onResult: (Group?) -> Unit) {
 			retrofit
 				.deleteGroup(group.id)
 				.enqueue(simpleCallback(onResult))
 		}
-		fun deleteGroup(groupId: Int, onResult: (Error?) -> Unit) {
+		fun deleteGroup(groupId: Int, onResult: (Group?) -> Unit) {
 			retrofit
 				.deleteGroup(groupId)
 				.enqueue(simpleCallback(onResult))
@@ -118,19 +125,19 @@ class Api {
 
 		fun createGroup(name: String, onResult: (Group?) -> Unit) {
 			retrofit
-				.createGroup(name)
+				.createGroup(CreateGroupRequest(name))
 				.enqueue(simpleCallback(onResult))
 		}
 
 		fun register(name: String, email: String, password: String, onResult: (User?) -> Unit) {
 			retrofit
-				.register(UserRegistration(name, email, password, android.os.Build.MODEL))
+				.register(RegisterRequest(name, email, password, Build.MODEL))
 				.enqueue(simpleCallback(onResult))
 		}
 
 		fun login(email: String, password: String, onResult: (User?) -> Unit) {
 			retrofit
-				.login(LoginCredentials(email, password, android.os.Build.MODEL))
+				.login(LoginRequest(email, password, Build.MODEL))
 				.enqueue(simpleCallback(onResult))
 		}
 	}
