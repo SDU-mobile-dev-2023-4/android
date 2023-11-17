@@ -38,8 +38,8 @@ interface ApiEndpoints {
 	fun createGroup(@Query("name") name: String): Call<Group>
 
 	@POST("/api/register")
-	fun register(@Query("name") name: String, @Query("email") email: String, @Query("password") password: String, @Query("device_name") deviceName: String): Call<User>
+	fun register(@Body userRegistration: UserRegistration): Call<User>
 
 	@POST("/api/login")
-	fun login(@Query("email") email: String, @Query("password") password: String, @Query("device_name") deviceName: String): Call<User>
+	fun login(@Body loginCredentials: LoginCredentials): Call<User>
 }

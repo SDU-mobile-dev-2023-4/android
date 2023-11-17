@@ -124,13 +124,13 @@ class Api {
 
 		fun register(name: String, email: String, password: String, onResult: (User?) -> Unit) {
 			retrofit
-				.register(name, email, password, android.os.Build.MODEL)
+				.register(UserRegistration(name, email, password, android.os.Build.MODEL))
 				.enqueue(simpleCallback(onResult))
 		}
 
 		fun login(email: String, password: String, onResult: (User?) -> Unit) {
 			retrofit
-				.login(email, password, android.os.Build.MODEL)
+				.login(LoginCredentials(email, password, android.os.Build.MODEL))
 				.enqueue(simpleCallback(onResult))
 		}
 	}
