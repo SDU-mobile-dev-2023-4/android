@@ -21,30 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.authentication.Auth
 
-class ProfilePagePropsProvider : PreviewParameterProvider<ProfilePageProps> {
-    private val fakeValues = listOf(
-        ProfilePageProps { },
-    )
-    override val values = fakeValues.asSequence()
-    override val count: Int = values.count()
-}
-
-data class ProfilePageProps(
-    val onBack: () -> Unit,
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
 fun ProfilePage(
-    @PreviewParameter(ProfilePagePropsProvider::class) props: ProfilePageProps
+   onBack: () -> Unit,
 ) {
 
     val user = Auth.user!!
@@ -81,7 +65,7 @@ fun ProfilePage(
         )
         Spacer(Modifier.size(48.dp))
         Button(
-            onClick = props.onBack, modifier = Modifier.fillMaxWidth()
+            onClick = onBack, modifier = Modifier.fillMaxWidth()
         ) {
             Text("Save", fontSize = 30.sp)
         }
