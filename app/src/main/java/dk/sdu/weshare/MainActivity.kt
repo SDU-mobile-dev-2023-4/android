@@ -25,14 +25,20 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             val user = Auth.user
-            val startPage = if (user == null) "sign_in" else "groups"
+            val startPage = if (user == null) "signIn" else "groups"
 
             NavHost(navController = navController, startDestination = startPage) {
-                composable("sign_in") {
-                    SignInPage(navController = navController) { navController.navigate("groups") }
+                composable("signIn") {
+                    SignInPage(
+                        onRegister = { navController.navigate("register") },
+                        onSignIn = { navController.navigate("groups") },
+                    )
                 }
                 composable("register") {
-                    RegisterPage(navController = navController) { navController.navigate("groups") }
+                    RegisterPage(
+                        onSignIn = { navController.navigate("signIn") },
+                        onRegister = { navController.navigate("groups") },
+                    )
                 }
                 composable("groups") {
                     GroupsPage(
@@ -66,7 +72,6 @@ class MainActivity : ComponentActivity() {
                         },
                     )
                 }
-
                 composable(
                     "group/{groupId}/edit",
                     arguments = listOf(navArgument("groupId") { type = NavType.IntType })
@@ -79,9 +84,8 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable(
-                    "create_expense/{groupId}", arguments = listOf(
-                        navArgument("groupId") { type = NavType.IntType },
-                    )
+                    "create_expense/{groupId}",
+                    arguments = listOf(navArgument("groupId") { type = NavType.IntType })
                 ) { navBackStackEntry ->
                     CreateExpensePage(
                         navBackStackEntry.arguments?.getInt("groupId")!!,

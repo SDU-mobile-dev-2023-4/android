@@ -29,7 +29,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import dk.sdu.weshare.ui.theme.buttonGreen
 import dk.sdu.weshare.authentication.Auth
 
@@ -37,8 +36,8 @@ import dk.sdu.weshare.authentication.Auth
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInPage(
-    navController: NavController, // Add NavController parameter
-    onSignIn: () -> Unit
+    onRegister: () -> Unit,
+    onSignIn: () -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -110,9 +109,7 @@ fun SignInPage(
             Spacer(Modifier.size(4.dp))
             Text(text = "Register", color = buttonGreen, modifier = Modifier
                 .padding(start = 4.dp)
-                .clickable {
-                    navController.navigate("register")
-                }
+                .clickable { onRegister() }
             )
         }
     }
