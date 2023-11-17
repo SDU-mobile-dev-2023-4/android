@@ -40,7 +40,7 @@ import dk.sdu.weshare.models.Group
 @Composable
 fun GroupDetailsPage(
     groupId: Int,
-    onSave: (Int) -> Unit,
+    onSave: () -> Unit,
 ) {
     var group: Group? by remember { mutableStateOf(null) }
     var groupName by remember { mutableStateOf(group?.name ?: "") }
@@ -132,7 +132,7 @@ fun GroupDetailsPage(
             if (group != null) {
                 Api.updateGroup(group!!, groupName) {
                     if (it != null) {
-                        onSave(it.id)
+                        onSave()
                     }
                 }
             }
