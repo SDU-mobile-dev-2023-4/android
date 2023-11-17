@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -28,6 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -82,19 +85,25 @@ fun CreateExpensePage(
     ) {
         OutlinedTextField(
             name,
-            onValueChange = { name = it },
+            onValueChange = { name = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Name") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 16.dp),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next)
         )
         OutlinedTextField(
             price,
-            onValueChange = { price = it },
+            onValueChange = { price = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Price") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 16.dp),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next)
         )
 
         ExposedDropdownMenuBox(
