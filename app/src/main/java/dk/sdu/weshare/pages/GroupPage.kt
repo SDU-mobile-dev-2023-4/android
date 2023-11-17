@@ -28,28 +28,81 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
 import dk.sdu.weshare.authentication.Auth
 import dk.sdu.weshare.models.Group
 
-data class GroupPageProps(
-    val groupId: Int,
-    val onBack: () -> Unit,
-    val onEditGroup: (Int) -> Unit,
-    val onAddExpense: (Int) -> Unit,
-)
+@Composable
+fun GroupPage(
+    groupId: Int,
+    onBack: () -> Unit,
+    onEditGroup: (Int) -> Unit,
+    onAddExpense: (Int) -> Unit,
+) {
+    var group: Group? by remember { mutableStateOf(null) }
+    Api.getGroup(groupId) {
+        if (it != null) {
+            group = it
+        }
+    }
 
-class GroupPagePropsProvider : PreviewParameterProvider<GroupPageProps> {
-    private val fakeValues = listOf(
-        GroupPageProps(1, {}, {}, {})
-    )
-    override val values = fakeValues.asSequence()
-    override val count: Int = values.count()
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .padding(16.dp)
+
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Spacer(modifier = Modifier.size(60.dp))
+            Text( group?.name ?: "...",
+                fontSize = 60.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .weight(1f)
+            )
+            Icon(
+                imageVector = Icons.Outlined.Edit,
+                contentDescription = "View Group ${group?.name ?: "..."}",
+                modifier = Modifier
+                    .size(60.dp)
+                    .clickable(onClick = { onEditGroup(groupId) })
+            )
+        }
+
+        Spacer(modifier = Modifier.size(30.dp))
+        group?.let { CalculationList(it) }
+
+        Spacer(modifier = Modifier.size(30.dp))
+        Button(onClick = { onAddExpense(groupId) },
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.border(2.dp,
+                Color.Green,
+                shape = RoundedCornerShape(8.dp)),
+            colors = ButtonDefaults
+                .buttonColors(
+                    contentColor = Color.Transparent,
+                    containerColor = Color.Transparent
+                )
+        ){
+
+            Text("Add",
+                fontSize = 30.sp,
+                color = Color.Green)
+        }
+
+        Spacer(modifier = Modifier.size(30.dp))
+        // Integrate the ExpensesList Composable
+        group?.let { ExpensesList(it) }
+    }
 }
 
 @Composable
@@ -68,7 +121,7 @@ fun CalculationList(group: Group) {
 
     Column (
         modifier = Modifier.padding(start = 60.dp, end = 60.dp)
-        ) {
+    ) {
 
         Row {
             Text(
@@ -155,73 +208,5 @@ fun ExpensesList(group: Group) {
                 )
             }
         }
-    }
-}
-@Preview(showBackground = true)
-@Composable
-fun GroupPage(
-    @PreviewParameter(GroupPagePropsProvider::class) props: GroupPageProps
-) {
-    var group: Group? by remember { mutableStateOf(null) }
-    Api.getGroup(props.groupId) {
-        if (it != null) {
-            group = it
-        }
-    }
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(16.dp)
-
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.size(60.dp))
-            Text( group?.name ?: "...",
-                fontSize = 60.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .weight(1f)
-            )
-            Icon(
-                imageVector = Icons.Outlined.Edit,
-                contentDescription = "View Group ${group?.name ?: "..."}",
-                modifier = Modifier
-                    .size(60.dp)
-                    .clickable(onClick = { props.onEditGroup(props.groupId) })
-            )
-        }
-
-        Spacer(modifier = Modifier.size(30.dp))
-        group?.let { CalculationList(it) }
-
-        Spacer(modifier = Modifier.size(30.dp))
-        Button(onClick = { props.onAddExpense(props.groupId) },
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.border(2.dp,
-                Color.Green,
-                shape = RoundedCornerShape(8.dp)),
-            colors = ButtonDefaults
-                .buttonColors(
-                    contentColor = Color.Transparent,
-                    containerColor = Color.Transparent
-                )
-        ){
-
-            Text("Add",
-                fontSize = 30.sp,
-                color = Color.Green)
-        }
-
-        Spacer(modifier = Modifier.size(30.dp))
-        // Integrate the ExpensesList Composable
-        group?.let { ExpensesList(it) }
     }
 }

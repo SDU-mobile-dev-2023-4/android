@@ -29,14 +29,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import dk.sdu.weshare.ui.theme.buttonGreen
 import dk.sdu.weshare.authentication.Auth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterPage(
-	navController: NavController, // Add NavController parameter
+	onSignIn: () -> Unit,
 	onRegister: () -> Unit
 ) {
 	var email by remember { mutableStateOf("") }
@@ -125,9 +124,7 @@ fun RegisterPage(
 			Spacer(Modifier.size(4.dp))
 			Text(text = "Sign in", color = buttonGreen, modifier = Modifier
 				.padding(start = 4.dp)
-				.clickable {
-					navController.navigate("sign_in")
-				}
+				.clickable { onSignIn() }
 			)
 		}
 	}

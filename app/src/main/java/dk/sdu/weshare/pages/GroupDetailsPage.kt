@@ -30,50 +30,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
 import dk.sdu.weshare.models.Group
 
-class GroupDetailsPagePropsProvider : PreviewParameterProvider<GroupDetailsPageProps> {
-
-    private val fakeValues = listOf(
-        GroupDetailsPageProps(null) { },
-        GroupDetailsPageProps("1") { },
-    )
-    override val values = fakeValues.asSequence()
-    override val count: Int = values.count()
-}
-
-data class GroupDetailsPageProps(
-    val groupId: String?,
-    val onSave: (Group) -> Unit,
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
 fun GroupDetailsPage(
-    @PreviewParameter(GroupDetailsPagePropsProvider::class) props: GroupDetailsPageProps,
+    groupId: Int,
+    onSave: (Int) -> Unit,
 ) {
     var group: Group? by remember { mutableStateOf(null) }
     var groupName by remember { mutableStateOf(group?.name ?: "") }
-    if (props.groupId != null) {
-        Api.getGroup(props.groupId.toInt()) {
-            if (it != null) {
-                group = it
-//                groupName = it.name
-            } else {
-                println("Couldn't get group with id ${props.groupId}")
-            }
-        }
-    } else {
-        Api.createGroup("Unnamed group") {
+    Api.getGroup(groupId) {
+        if (it != null) {
             group = it
+        } else {
+            println("Couldn't get group with id $groupId")
         }
     }
 
@@ -83,8 +58,10 @@ fun GroupDetailsPage(
         AddUserPopup(
             onAddUser = { email ->
                 Api.addUserToGroup(group!!, email) {
-                    group = it
-                    isDialogOpen = false
+                    if (it != null) {
+                        group = it
+                        isDialogOpen = false
+                    }
                 }
             }, onDismiss = {
                 isDialogOpen = false
@@ -155,7 +132,7 @@ fun GroupDetailsPage(
             if (group != null) {
                 Api.updateGroup(group!!, groupName) {
                     if (it != null) {
-                        props.onSave(it)
+                        onSave(it.id)
                     }
                 }
             }

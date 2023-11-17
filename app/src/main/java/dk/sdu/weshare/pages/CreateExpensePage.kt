@@ -31,10 +31,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
@@ -42,30 +38,17 @@ import dk.sdu.weshare.authentication.Auth
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
 
-class CreateExpensePagePropsProvider : PreviewParameterProvider<CreateExpensePageProps> {
-    private val fakeValues = listOf(
-        CreateExpensePageProps(1) {},
-    )
-    override val values = fakeValues.asSequence()
-    override val count: Int = values.count()
-}
-
-data class CreateExpensePageProps(
-    val groupId: Int,
-    val onSave: () -> Unit,
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
 fun CreateExpensePage(
-    @PreviewParameter(CreateExpensePagePropsProvider::class) props: CreateExpensePageProps
+    groupId: Int,
+    onSave: () -> Unit,
 ) {
     var group: Group? by remember { mutableStateOf(null) }
 
-    Api.getGroup(props.groupId) {
+    Api.getGroup(groupId) {
         if (group == null) {
-            println("Couldn't find group with id ${props.groupId}")
+            println("Couldn't find group with id $groupId")
         }
         group = it
     }
@@ -140,10 +123,10 @@ fun CreateExpensePage(
         Spacer(Modifier.size(48.dp))
         Button(
             onClick = {
-                Api.addExpenseToGroup(props.groupId, Expense(payer!!.id, name, price.toInt())) {
+                Api.addExpenseToGroup(groupId, Expense(payer!!.id, name, price.toInt())) {
                     println(it)
                     if (it != null) {
-                        props.onSave()
+                        onSave()
                     }
                 }
             },
