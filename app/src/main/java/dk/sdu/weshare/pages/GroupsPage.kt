@@ -79,7 +79,13 @@ fun GroupsPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable { props.onCreateGroup() })
+                    .clickable {
+                        Api.createGroup("Unnamed group") {
+                            if (it != null) {
+                                props.onViewGroup(it.id)
+                            }
+                        }
+                    })
         }
         Spacer(Modifier.size(32.dp))
         Text("Groups",
