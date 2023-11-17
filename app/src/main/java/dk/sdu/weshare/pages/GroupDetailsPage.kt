@@ -71,10 +71,6 @@ fun GroupDetailsPage(
                 println("Couldn't get group with id ${props.groupId}")
             }
         }
-    } else {
-        Api.createGroup("Unnamed group") {
-            group = it
-        }
     }
 
     var isDialogOpen by remember { mutableStateOf(false) }
