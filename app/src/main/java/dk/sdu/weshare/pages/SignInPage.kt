@@ -1,7 +1,9 @@
 package dk.sdu.weshare.pages
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,12 +25,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dk.sdu.weshare.R
 import dk.sdu.weshare.ui.theme.buttonGreen
 import dk.sdu.weshare.authentication.Auth
 
@@ -41,6 +46,7 @@ fun SignInPage(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val painter = painterResource(id = R.drawable.logo)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -49,7 +55,17 @@ fun SignInPage(
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(48.dp)) {
-        Text("UOMI", fontSize = 70.sp)
+//        Text("UOMI", fontSize = 70.sp)
+        Box(modifier = Modifier
+            .size(200.dp),
+        ) {
+            Image(painter = painter,
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(50.dp)),
+                alignment = Alignment.Center)
+        }
         Spacer(Modifier.size(48.dp))
 
 
