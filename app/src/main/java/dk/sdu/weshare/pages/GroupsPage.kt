@@ -48,7 +48,7 @@ class GroupsPagePropsProvider : PreviewParameterProvider<GroupsPageProps> {
 data class GroupsPageProps(
     val onViewProfile: (Int) -> Unit,
     val onViewGroup: (Int) -> Unit,
-    val onCreateGroup: () -> Unit,
+    val onCreateGroup: (Group) -> Unit,
 )
 
 @Composable
@@ -79,7 +79,14 @@ fun GroupsPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable { props.onCreateGroup() })
+                    .clickable {
+                        Api.createGroup("groupName") {
+                            if (it != null) {
+                                props.onCreateGroup(it)
+                            }
+                        }
+                    }
+            )
         }
         Spacer(Modifier.size(32.dp))
         Text("Groups",
