@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -27,9 +29,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
@@ -41,6 +45,7 @@ import dk.sdu.weshare.models.Group
 fun GroupDetailsPage(
     groupId: Int,
     onSave: () -> Unit,
+    onBack: () -> Unit,
 ) {
     var group: Group? by remember { mutableStateOf(null) }
     var groupName by remember { mutableStateOf(group?.name ?: "") }
@@ -67,6 +72,23 @@ fun GroupDetailsPage(
                 isDialogOpen = false
             }
         )
+    }//     adding a top bar
+    Column{
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
+        )
+        {
+            //turn back to groups page
+            Icon(imageVector = Icons.Outlined.ArrowBack,
+                contentDescription = "back",
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(CircleShape)
+                    .padding(start = 8.dp)
+                    .clickable { onBack() }
+            )
+        }
     }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
