@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
+import dk.sdu.weshare.api.requests.RequestQueue
 import dk.sdu.weshare.authentication.Auth
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
@@ -127,6 +128,9 @@ fun CreateExpensePage(
                     println(it)
                     if (it != null) {
                         onSave()
+                    } else {
+                        println("Couldn't add expense to group, retrying...")
+                        RequestQueue.addExpenseToQueue(groupId, Expense(payer!!.id, name, price.toInt()))
                     }
                 }
             },
