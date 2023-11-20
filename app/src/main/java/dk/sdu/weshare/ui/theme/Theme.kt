@@ -1,6 +1,7 @@
 package dk.sdu.weshare.ui.theme
 
 import android.app.Activity
+import androidx.compose.ui.text.font.FontFamily
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -13,7 +14,10 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontWeight
 import androidx.core.view.WindowCompat
+import dk.sdu.weshare.R
 
 private val DarkColorScheme = darkColorScheme(
         primary = Purple80,
@@ -61,7 +65,6 @@ fun WeShareTheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
-
     MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,
