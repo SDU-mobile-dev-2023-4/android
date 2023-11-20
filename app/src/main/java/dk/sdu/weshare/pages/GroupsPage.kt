@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
@@ -98,7 +99,9 @@ fun GroupsPage(
                             .clickable {
                                 onViewGroup(group.id)
                             }) {
-                        Text(group.name, fontSize = 30.sp)
+                        Text(group.name, fontSize = 30.sp,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.weight(0.9f))
 
                         Icon(
                             imageVector = Icons.Outlined.KeyboardArrowRight,

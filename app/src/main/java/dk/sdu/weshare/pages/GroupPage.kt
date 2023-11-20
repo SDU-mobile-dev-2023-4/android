@@ -83,8 +83,6 @@ fun GroupPage(
                 contentDescription = "View Group ${group?.name ?: "..."}",
                 modifier = Modifier
                     .size(60.dp)
-                    .weight(1f)
-                    .padding(end = 8.dp)
                     .clickable(onClick = { onEditGroup(groupId) })
             )
         }
