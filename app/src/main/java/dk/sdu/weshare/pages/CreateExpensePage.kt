@@ -70,7 +70,7 @@ fun CreateExpensePage(
     ) {
         OutlinedTextField(
             name,
-            onValueChange = { name = it.filter { c -> !c.isWhitespace() } },
+            onValueChange = { name = it.filter { c -> c.isLetter() || c.isWhitespace() } },
             label = { Text("Name") },
             modifier = Modifier
                 .fillMaxWidth()
