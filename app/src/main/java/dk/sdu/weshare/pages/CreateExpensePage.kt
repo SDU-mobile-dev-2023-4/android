@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -60,6 +61,22 @@ fun CreateExpensePage(
     var payer by remember { mutableStateOf(Auth.user) }
 
     var dropdownExpanded by remember { mutableStateOf(false) }
+
+    fun saveExpense() {
+        if (name.isNotEmpty()) {
+            Api.addExpenseToGroup(groupId, Expense(payer!!.id, name, price.toInt())) {
+                println(it)
+                if (it != null) {
+                    ServiceBuilder.invalidateCache()
+                    onSave()
+                } else {
+                    println("Couldn't add expense to group, retrying...")
+                    RequestQueue.addExpenseToQueue(groupId, Expense(payer!!.id, name, price.toInt()))
+                }
+            }
+        }
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -79,18 +96,6 @@ fun CreateExpensePage(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next)
         )
-        OutlinedTextField(
-            price,
-            onValueChange = { price = it.filter { c -> !c.isWhitespace() } },
-            label = { Text("Price") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next)
-        )
-
         ExposedDropdownMenuBox(
             expanded = dropdownExpanded,
             onExpandedChange = { dropdownExpanded = !dropdownExpanded },
@@ -121,23 +126,24 @@ fun CreateExpensePage(
                 }
             }
         }
+        OutlinedTextField(
+            price,
+            onValueChange = { price = it.filter { c -> !c.isWhitespace() } },
+            label = { Text("Price") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = { saveExpense() }
+            ),
+        )
 
         Spacer(Modifier.size(48.dp))
         Button(
-            onClick = {
-                if (name.isNotEmpty()) {
-                    Api.addExpenseToGroup(groupId, Expense(payer!!.id, name, price.toInt())) {
-                        println(it)
-                        if (it != null) {
-                            ServiceBuilder.invalidateCache()
-                            onSave()
-                        } else {
-                            println("Couldn't add expense to group, retrying...")
-                            RequestQueue.addExpenseToQueue(groupId, Expense(payer!!.id, name, price.toInt()))
-                        }
-                    }
-                }
-            },
+            onClick = {saveExpense()},
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,
                 contentColor = Color.Black
