@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -47,6 +48,18 @@ fun RegisterPage(
 	var password by remember { mutableStateOf("") }
 	var name by remember { mutableStateOf("") }
 	val painter = painterResource(id = R.drawable.logo)
+
+	fun register() {
+		if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()){
+			Auth().register(name, email, password) { regUser ->
+				if (regUser != null) {
+					println("User ${regUser.id} logged in")
+					println("token: ${regUser.token}")
+					onRegister()
+				}
+			}
+		}
+	}
 
 	Column(
 		horizontalAlignment = Alignment.CenterHorizontally,
@@ -109,21 +122,14 @@ fun RegisterPage(
 				keyboardType = KeyboardType.Password,
 				imeAction = ImeAction.Done
 			),
+			keyboardActions = KeyboardActions(
+				onDone = { register() }
+			),
 		)
 
 		Spacer(Modifier.size(48.dp))
 		Button(
-			onClick = {
-				if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()){
-					Auth().register(name, email, password) { regUser ->
-						if (regUser != null) {
-							println("User ${regUser.id} logged in")
-							println("token: ${regUser.token}")
-							onRegister()
-						}
-					}
-				}
-			},
+			onClick = {register()},
 			colors = ButtonDefaults.buttonColors(
 				containerColor = buttonGreen,
 				contentColor = Color.White

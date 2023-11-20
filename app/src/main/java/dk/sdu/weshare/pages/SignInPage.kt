@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -47,6 +48,17 @@ fun SignInPage(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val painter = painterResource(id = R.drawable.logo)
+
+    fun signInAction() {
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            println("Sign in button clicked")
+            Auth().login(email, password) { loggedInUser ->
+                if (loggedInUser != null) {
+                    onSignIn()
+                }
+            }
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -95,20 +107,14 @@ fun SignInPage(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
+            keyboardActions = KeyboardActions(
+                onDone = { signInAction() }
+        ),
         )
 
         Spacer(Modifier.size(48.dp))
         Button(
-            onClick = {
-                if (email.isNotEmpty() && password.isNotEmpty()) {
-                    println("Sign in button clicked")
-                    Auth().login(email, password) { loggedInUser ->
-                        if (loggedInUser != null) {
-                            onSignIn()
-                        }
-                    }
-                }
-            },
+            onClick = { signInAction() },
             colors = ButtonDefaults.buttonColors(
                 containerColor = buttonGreen,
                 contentColor = Color.White
@@ -130,3 +136,4 @@ fun SignInPage(
         }
     }
 }
+
