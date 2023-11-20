@@ -19,6 +19,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -92,7 +93,14 @@ fun RegisterPage(
 				.padding(top = 16.dp),
 			keyboardOptions = KeyboardOptions(
 				keyboardType = KeyboardType.Text,
-				imeAction = ImeAction.Next)
+				imeAction = ImeAction.Next),
+			colors =  TextFieldDefaults.outlinedTextFieldColors(
+				unfocusedBorderColor = Color.LightGray,
+				focusedBorderColor = Color.White,
+				textColor = Color.White,
+				cursorColor = Color.White,
+				focusedLabelColor = Color.White,
+			)
 
 		)
 
@@ -106,8 +114,14 @@ fun RegisterPage(
 				.padding(top = 16.dp),
 			keyboardOptions = KeyboardOptions(
 				keyboardType = KeyboardType.Text,
-				imeAction = ImeAction.Next)
-
+				imeAction = ImeAction.Next),
+			colors =  TextFieldDefaults.outlinedTextFieldColors(
+				unfocusedBorderColor = Color.LightGray,
+				focusedBorderColor = Color.White,
+				textColor = Color.White,
+				cursorColor = Color.White,
+				focusedLabelColor = Color.White,
+			)
 		)
 
 		OutlinedTextField(
@@ -125,6 +139,13 @@ fun RegisterPage(
 			keyboardActions = KeyboardActions(
 				onDone = { register() }
 			),
+			colors =  TextFieldDefaults.outlinedTextFieldColors(
+				unfocusedBorderColor = Color.LightGray,
+				focusedBorderColor = Color.White,
+				textColor = Color.White,
+				cursorColor = Color.White,
+				focusedLabelColor = Color.White,
+			)
 		)
 
 		Spacer(Modifier.size(48.dp))

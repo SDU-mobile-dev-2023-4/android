@@ -54,6 +54,7 @@ fun WeShareTheme(
         dynamicColor: Boolean = true,
         content: @Composable () -> Unit
 ) {
+
     val colorScheme = when {
         dynamicColor -> {
             val context = LocalContext.current
@@ -61,12 +62,13 @@ fun WeShareTheme(
         }
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
+
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = 0xFF082150.toInt()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }

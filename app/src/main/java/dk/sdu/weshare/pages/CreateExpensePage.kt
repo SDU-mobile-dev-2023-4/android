@@ -1,6 +1,7 @@
 package dk.sdu.weshare.pages
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,8 +20,11 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -94,7 +98,14 @@ fun CreateExpensePage(
                 .padding(top = 16.dp),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next)
+                imeAction = ImeAction.Next),
+            colors =  TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.LightGray,
+                focusedBorderColor = Color.White,
+                textColor = Color.White,
+                cursorColor = Color.White,
+                focusedLabelColor = Color.White,
+            )
         )
         ExposedDropdownMenuBox(
             expanded = dropdownExpanded,
@@ -104,24 +115,38 @@ fun CreateExpensePage(
                 modifier = Modifier
                     .menuAnchor()
                     .fillMaxWidth()
-                    .padding(top = 16.dp),
+                    .padding(top = 16.dp)
+                    .background(Color.Transparent),
                 readOnly = true,
                 value = payer!!.name,
                 onValueChange = {},
                 label = { Text("Payer") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropdownExpanded) },
+                colors =  TextFieldDefaults.outlinedTextFieldColors(
+                    unfocusedBorderColor = Color.LightGray,
+                    focusedBorderColor = Color.White,
+                    textColor = Color.White,
+                    cursorColor = Color.White,
+                    focusedLabelColor = Color.White,
+                )
+
             )
             ExposedDropdownMenu(
                 expanded = dropdownExpanded,
                 onDismissRequest = { dropdownExpanded = false },
+                modifier = Modifier.background(Color(0xFF546d97))
             ) {
                 group?.members?.forEach { selectionOption ->
                     DropdownMenuItem(
-                        text = { Text(selectionOption.name) },
+                        text = { Text(
+                            selectionOption.name,
+                            fontSize = 20.sp,
+                        ) },
                         onClick = {
                             payer = selectionOption
                             dropdownExpanded = false
                         },
+                        modifier = Modifier.background(Color(0xFF546d97))
                     )
                 }
             }
@@ -139,18 +164,25 @@ fun CreateExpensePage(
             keyboardActions = KeyboardActions(
                 onDone = { saveExpense() }
             ),
+            colors =  TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.LightGray,
+                focusedBorderColor = Color.White,
+                textColor = Color.White,
+                cursorColor = Color.White,
+                focusedLabelColor = Color.White,
+            )
         )
 
         Spacer(Modifier.size(48.dp))
         Button(
             onClick = {saveExpense()},
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = Color.Black
+                containerColor = Color.Transparent,
+                contentColor = Color.White
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .border(BorderStroke(2.dp, Color.Black), CircleShape)
+                .border(BorderStroke(2.dp, Color.White), CircleShape)
                 .clip(RoundedCornerShape(5.dp))
         ) {
             Text("Save", fontSize = 30.sp)

@@ -19,6 +19,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -91,7 +92,14 @@ fun SignInPage(
                 .padding(top = 16.dp),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next)
+                imeAction = ImeAction.Next),
+            colors =  TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.LightGray,
+                focusedBorderColor = Color.White,
+                textColor = Color.White,
+                cursorColor = Color.White,
+                focusedLabelColor = Color.White,
+            )
 
         )
 
@@ -107,9 +115,17 @@ fun SignInPage(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
+
             keyboardActions = KeyboardActions(
                 onDone = { signInAction() }
         ),
+            colors =  TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.LightGray,
+                focusedBorderColor = Color.White,
+                textColor = Color.White,
+                cursorColor = Color.White,
+                focusedLabelColor = Color.White,
+            )
         )
 
         Spacer(Modifier.size(48.dp))
