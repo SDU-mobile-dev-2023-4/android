@@ -8,4 +8,5 @@ data class Group(
     @SerializedName("name") val name: String,
     @SerializedName("users") val members: List<User>?,
     @SerializedName("expenses") val expenses: List<Expense>?,
+    @SerializedName("description") val description: List<Expense>?,
 )

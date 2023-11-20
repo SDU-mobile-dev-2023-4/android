@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -52,7 +55,8 @@ fun GroupDetailsPage(
     onBack: () -> Unit,
 ) {
     var group: Group? by remember { mutableStateOf(null) }
-    var groupName by remember { mutableStateOf("") }
+    var groupName by remember { mutableStateOf("")}
+    var groupDescription by remember { mutableStateOf("") }
     var changed by remember { mutableStateOf(false) }
 
     Api.getGroup(groupId) {
@@ -128,10 +132,28 @@ fun GroupDetailsPage(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done
             ),
-        )
+        ) // groupName
 
         Spacer(Modifier.size(16.dp))
 
+        OutlinedTextField(
+            value = if (changed) groupDescription else group?.name ?: "",
+            label = { Text("Description") },
+            onValueChange = {
+                groupDescription = it
+                changed = true
+            },
+            singleLine = false,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(top = 16.dp),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+        )// groupDescription
+        Spacer(Modifier.size(16.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -163,6 +185,21 @@ fun GroupDetailsPage(
                         .padding(top = 16.dp)
                 ) {
                     Text(member.email, fontSize = 30.sp)
+                    Icon(
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = "Remove group member",
+                        modifier = Modifier
+                            .size(35.dp)
+                            .clip(CircleShape)
+                            .clickable {
+                                Api.removeUserFromGroup(group!!, member) {
+                                    if (it != null) {
+                                        group = it
+                                    }
+                                }
+                            },
+                        tint = Color.Red // Apply the red tint color here
+                    )
                 }
             }
         }

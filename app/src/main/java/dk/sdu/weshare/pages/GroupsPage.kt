@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
@@ -70,8 +71,8 @@ fun GroupsPage(
                             if (it != null) {
                                 onViewGroup(it.id)
                             }
-                        }
-                    })
+                    }
+            })
         }
         Spacer(Modifier.size(32.dp))
         Text("Groups",
@@ -87,18 +88,19 @@ fun GroupsPage(
                 .fillMaxHeight()
                 .verticalScroll(rememberScrollState())
         ) {
-
             Column {
                 groups.forEach { group ->
                     Row(horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .border(1.dp, color = Color.Black)
+                            .clip(RoundedCornerShape(8.dp))
+                            .border(1.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
                             .padding(start = 16.dp)
                             .clickable {
                                 onViewGroup(group.id)
-                            }) {
+                            }
+                    ) {
                         Text(group.name, fontSize = 30.sp,
                             textAlign = TextAlign.Start,
                             modifier = Modifier.weight(0.9f))
