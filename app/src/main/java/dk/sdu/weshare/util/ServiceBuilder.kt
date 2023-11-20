@@ -15,8 +15,9 @@ import java.util.concurrent.TimeUnit
 
 object ServiceBuilder {
 	private var cacheDir: File = File("placeholder") // Placeholder
-	private lateinit var client: OkHttpClient // Late inniting, so we actually can set the cache dir in runtime
-	private lateinit var retrofit: Retrofit // Late inniting, so we actually can set the cache dir in runtime
+	// Late inniting, so we actually can set the cache dir in runtime
+	private lateinit var client: OkHttpClient
+	private lateinit var retrofit: Retrofit
 
 	private val logging: HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
 		level = HttpLoggingInterceptor.Level.HEADERS
@@ -45,7 +46,8 @@ object ServiceBuilder {
 	}
 
 	fun <T> buildService(service: Class<T>): T {
-		initializeClient() // Late inniting, so we actually can set the cache dir in runtime
+		// Late inniting, so we actually can set the cache dir in runtime
+		initializeClient()
 		return retrofit.create(service)
 	}
 
@@ -62,7 +64,7 @@ class CacheInterceptor : Interceptor {
 	override fun intercept(chain: Interceptor.Chain): Response {
 		val response: Response = chain.proceed(chain.request())
 		val cacheControl = CacheControl.Builder()
-			.maxAge(10, TimeUnit.MINUTES)
+			.maxAge(1, TimeUnit.MINUTES)
 			.build()
 		return response.newBuilder()
 			.header("Cache-Control", cacheControl.toString())
