@@ -14,11 +14,9 @@ import dk.sdu.weshare.util.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 class Api {
 	companion object {
 		private val retrofit = ServiceBuilder.buildService(ApiEndpoints::class.java)
-
 		private fun <T> simpleCallback(onResult: (T?) -> Unit): Callback<T> {
 			return object : Callback<T> {
 				override fun onFailure(call: Call<T>, t: Throwable) {
@@ -86,6 +84,7 @@ class Api {
 		}
 
 		fun getGroup(group: Group, onResult: (Group?) -> Unit) {
+
 			retrofit
 				.getGroup(group.id)
 				.enqueue(simpleCallback(onResult))
