@@ -67,7 +67,6 @@ fun GroupPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-
                     .clickable { onBack() }
             )
             //Group name
@@ -83,6 +82,7 @@ fun GroupPage(
                 contentDescription = "View Group ${group?.name ?: "..."}",
                 modifier = Modifier
                     .size(60.dp)
+                    .clip(CircleShape)
                     .clickable(onClick = { onEditGroup(groupId) })
             )
         }
