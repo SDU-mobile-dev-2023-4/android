@@ -67,15 +67,14 @@ fun GroupPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .weight(1f)
-                    .padding(start = 8.dp)
                     .clickable { onBack() }
             )
             //Group name
             Text( group?.name ?: "...",
-            fontSize = 32.sp,
+            fontSize = 30.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
+                .weight(0.8f),
             )
             // edit group
             Icon(
@@ -83,8 +82,7 @@ fun GroupPage(
                 contentDescription = "View Group ${group?.name ?: "..."}",
                 modifier = Modifier
                     .size(60.dp)
-                    .weight(1f)
-                    .padding(end = 8.dp)
+                    .clip(CircleShape)
                     .clickable(onClick = { onEditGroup(groupId) })
             )
         }
