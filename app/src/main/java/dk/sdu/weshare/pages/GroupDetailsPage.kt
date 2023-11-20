@@ -58,8 +58,6 @@ fun GroupDetailsPage(
             println("Couldn't get group with id $groupId")
         }
     }
-    var textColor by remember { mutableStateOf(Color.Black) }
-
     var isDialogOpen by remember { mutableStateOf(false) }
 
     if (isDialogOpen) {
@@ -91,14 +89,6 @@ fun GroupDetailsPage(
                     .padding(start = 8.dp)
                     .clickable { onBack() }
             )
-            //Group name
-            Text(
-                text = group?.name ?: "...",
-                fontSize = 32.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier,
-                color = textColor
-            )
         }
     }
     Column(
@@ -109,15 +99,17 @@ fun GroupDetailsPage(
             .fillMaxHeight()
             .padding(48.dp)
     ) {
+        var textChanged by remember {
+            mutableStateOf(false)
+        }
         OutlinedTextField(
-            value = groupName,
+            value = group?.name ?: "",
             label = { Text("Name") },
             onValueChange = {
                 groupName = it
                 group = group?.copy(name = it) // Update the group object
-                textColor = Color.Green
+                textChanged = true
             },
-
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()

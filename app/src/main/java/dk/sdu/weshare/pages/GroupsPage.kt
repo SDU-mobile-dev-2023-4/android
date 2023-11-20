@@ -99,16 +99,15 @@ fun GroupsPage(
                                 onViewGroup(group.id)
                             }) {
                         Text(group.name, fontSize = 30.sp)
-
                         Icon(
                             imageVector = Icons.Outlined.KeyboardArrowRight,
                             contentDescription = "View Group ${group.name}",
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(CircleShape)
-
                         )
                     }
+                    Spacer(modifier = Modifier.size(8.dp))
                 }
             }
         }
