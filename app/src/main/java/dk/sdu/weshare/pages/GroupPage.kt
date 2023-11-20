@@ -67,8 +67,7 @@ fun GroupPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .weight(1f)
-                    .padding(start = 8.dp)
+
                     .clickable { onBack() }
             )
             //Group name
