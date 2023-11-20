@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
 import dk.sdu.weshare.models.Group
+import dk.sdu.weshare.util.ServiceBuilder
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,6 +50,9 @@ fun GroupDetailsPage(
 ) {
     var group: Group? by remember { mutableStateOf(null) }
     var groupName by remember { mutableStateOf(group?.name ?: "") }
+
+    var changed: Boolean = false
+
     Api.getGroup(groupId) {
         if (it != null) {
             group = it
@@ -86,7 +90,12 @@ fun GroupDetailsPage(
                     .size(60.dp)
                     .clip(CircleShape)
                     .padding(start = 8.dp)
-                    .clickable { onBack() }
+                    .clickable {
+                        if (changed) {
+                            ServiceBuilder.invalidateCache()
+                        }
+                        onBack()
+                    }
             )
         }
     }
@@ -101,7 +110,11 @@ fun GroupDetailsPage(
         OutlinedTextField(
             value = groupName,
             label = { Text("Name") },
-            onValueChange = { groupName = it },
+            onValueChange = {
+                groupName = it
+                changed = true
+                print(changed)
+            },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -153,6 +166,9 @@ fun GroupDetailsPage(
         Button(onClick = {
             if (group != null) {
                 Api.updateGroup(group!!, groupName) {
+                    if (changed) {
+                        ServiceBuilder.invalidateCache()
+                    }
                     if (it != null) {
                         onSave()
                     }
