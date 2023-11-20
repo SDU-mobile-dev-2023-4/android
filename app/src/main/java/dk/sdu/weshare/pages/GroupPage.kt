@@ -75,6 +75,7 @@ fun GroupPage(
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
+                .weight(0.8f),
             )
             // edit group
             Icon(
