@@ -1,5 +1,8 @@
 package dk.sdu.weshare.pages
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,6 +25,7 @@ import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
 import dk.sdu.weshare.authentication.Auth
 import dk.sdu.weshare.models.Group
+import kotlinx.coroutines.delay
 
 @Composable
 fun GroupsPage(
@@ -45,9 +50,10 @@ fun GroupsPage(
     onViewGroup: (Int) -> Unit,
 ) {
     val user = Auth.user!!
-
+    var isVisible by remember { mutableStateOf(false) }
     var groups: List<Group> by remember { mutableStateOf(listOf()) }
     Api.getAllGroups { groups = it ?: listOf()}
+
 
     Column {
         Row(
@@ -78,8 +84,8 @@ fun GroupsPage(
                             if (it != null) {
                                 onViewGroup(it.id)
                             }
-                    }
-            }, tint = Color.Green
+                        }
+                    }, tint = Color.Green
             )
         }
         Spacer(Modifier.size(32.dp))
@@ -96,9 +102,25 @@ fun GroupsPage(
                 .fillMaxHeight()
                 .verticalScroll(rememberScrollState())
         ) {
-            Column {
-                groups.forEach { group ->
-                    Row(horizontalArrangement = Arrangement.SpaceBetween,
+
+            groups.forEachIndexed { index, group ->
+                var isVisible by remember { mutableStateOf(false) }
+                LaunchedEffect(key1 = group) {
+                    delay(index * 100L)  // Staggered delay for each group
+                    isVisible = true
+                }
+
+                AnimatedVisibility(
+                    visible = isVisible,
+                    enter = fadeIn(animationSpec = tween(durationMillis = 300)) +
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> fullWidth },
+                                animationSpec = tween(durationMillis = 300)
+                            )
+                ) {
+
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -118,11 +140,12 @@ fun GroupsPage(
                             .clickable {
                                 onViewGroup(group.id)
                             },
-
-                    ) {
-                        Text(group.name, fontSize = 30.sp,
+                        ) {
+                        Text(
+                            group.name, fontSize = 30.sp,
                             textAlign = TextAlign.Start,
-                            modifier = Modifier.weight(0.9f))
+                            modifier = Modifier.weight(0.9f)
+                        )
                         Icon(
                             imageVector = Icons.Outlined.KeyboardArrowRight,
                             contentDescription = "View Group ${group.name}",
@@ -132,8 +155,9 @@ fun GroupsPage(
                             tint = Color(0xFF0d4369)
                         )
                     }
-                    Spacer(modifier = Modifier.size(8.dp))
                 }
+                    Spacer(modifier = Modifier.size(8.dp))
+
             }
         }
     }
