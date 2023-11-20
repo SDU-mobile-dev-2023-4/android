@@ -33,7 +33,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
@@ -56,6 +58,7 @@ fun GroupDetailsPage(
             println("Couldn't get group with id $groupId")
         }
     }
+    var textColor by remember { mutableStateOf(Color.Black) }
 
     var isDialogOpen by remember { mutableStateOf(false) }
 
@@ -88,6 +91,14 @@ fun GroupDetailsPage(
                     .padding(start = 8.dp)
                     .clickable { onBack() }
             )
+            //Group name
+            Text(
+                text = group?.name ?: "...",
+                fontSize = 32.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier,
+                color = textColor
+            )
         }
     }
     Column(
@@ -101,7 +112,12 @@ fun GroupDetailsPage(
         OutlinedTextField(
             value = groupName,
             label = { Text("Name") },
-            onValueChange = { groupName = it },
+            onValueChange = {
+                groupName = it
+                group = group?.copy(name = it) // Update the group object
+                textColor = Color.Green
+            },
+
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
