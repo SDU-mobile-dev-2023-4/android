@@ -72,7 +72,7 @@ fun GroupPage(
             )
             //Group name
             Text( group?.name ?: "...",
-            fontSize = 32.sp,
+            fontSize = 30.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
             )
