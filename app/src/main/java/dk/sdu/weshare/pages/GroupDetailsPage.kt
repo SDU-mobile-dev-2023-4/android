@@ -23,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,13 +52,16 @@ fun GroupDetailsPage(
     onBack: () -> Unit,
 ) {
     var group: Group? by remember { mutableStateOf(null) }
-    var groupName by remember { mutableStateOf(group?.name ?: "") }
-
-    var changed: Boolean = false
+    var groupName by remember { mutableStateOf("") }
+    var changed by remember { mutableStateOf(false) }
 
     Api.getGroup(groupId) {
         if (it != null) {
             group = it
+            // Only update groupName if it hasn't been changed by the user
+            if (!changed) {
+                groupName = it.name
+            }
         } else {
             println("Couldn't get group with id $groupId")
         }
@@ -108,16 +112,13 @@ fun GroupDetailsPage(
             .fillMaxHeight()
             .padding(48.dp)
     ) {
-        var textChanged by remember {
-            mutableStateOf(false)
-        }
+
         OutlinedTextField(
-            value = group?.name ?: "",
+            value = if (changed) groupName else group?.name ?: "",
             label = { Text("Name") },
             onValueChange = {
                 groupName = it
                 changed = true
-                print(changed)
             },
             singleLine = true,
             modifier = Modifier
