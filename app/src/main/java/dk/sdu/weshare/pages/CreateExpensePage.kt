@@ -125,14 +125,16 @@ fun CreateExpensePage(
         Spacer(Modifier.size(48.dp))
         Button(
             onClick = {
-                Api.addExpenseToGroup(groupId, Expense(payer!!.id, name, price.toInt())) {
-                    println(it)
-                    if (it != null) {
-                        ServiceBuilder.invalidateCache()
-                        onSave()
-                    } else {
-                        println("Couldn't add expense to group, retrying...")
-                        RequestQueue.addExpenseToQueue(groupId, Expense(payer!!.id, name, price.toInt()))
+                if (name.isNotEmpty()) {
+                    Api.addExpenseToGroup(groupId, Expense(payer!!.id, name, price.toInt())) {
+                        println(it)
+                        if (it != null) {
+                            ServiceBuilder.invalidateCache()
+                            onSave()
+                        } else {
+                            println("Couldn't add expense to group, retrying...")
+                            RequestQueue.addExpenseToQueue(groupId, Expense(payer!!.id, name, price.toInt()))
+                        }
                     }
                 }
             },
