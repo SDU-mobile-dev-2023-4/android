@@ -56,7 +56,7 @@ fun CreateExpensePage(
     }
 
     var name by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("") }
+    var price by remember { mutableStateOf("0") }
     var payer by remember { mutableStateOf(Auth.user) }
 
     var dropdownExpanded by remember { mutableStateOf(false) }
