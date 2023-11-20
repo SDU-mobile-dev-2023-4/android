@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
@@ -60,7 +61,10 @@ fun ProfilePage(onSave: () -> Unit) {
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done)
+                imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = { onSave() }
+            ),
         )
         // User's email
         OutlinedTextField(
@@ -68,7 +72,7 @@ fun ProfilePage(onSave: () -> Unit) {
             onValueChange = { email = it.filter { c -> !c.isWhitespace() } },
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth(),
-            readOnly = true
+            readOnly = true,
         )
         Spacer(Modifier.size(48.dp))
         // This should update the user's name, but there is no API for that
