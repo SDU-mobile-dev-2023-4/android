@@ -73,7 +73,8 @@ fun ProfilePage(onSave: () -> Unit) {
         Spacer(Modifier.size(48.dp))
         // This should update the user's name, but there is no API for that
         Button(
-            onClick = onSave, modifier = Modifier.fillMaxWidth()
+            onClick = onSave,
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Save", fontSize = 30.sp)
         }

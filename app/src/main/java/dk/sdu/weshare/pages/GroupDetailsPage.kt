@@ -23,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,7 +34,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
@@ -49,18 +52,20 @@ fun GroupDetailsPage(
     onBack: () -> Unit,
 ) {
     var group: Group? by remember { mutableStateOf(null) }
-    var groupName by remember { mutableStateOf(group?.name ?: "") }
-
-    var changed: Boolean = false
+    var groupName by remember { mutableStateOf("") }
+    var changed by remember { mutableStateOf(false) }
 
     Api.getGroup(groupId) {
         if (it != null) {
             group = it
+            // Only update groupName if it hasn't been changed by the user
+            if (!changed) {
+                groupName = it.name
+            }
         } else {
             println("Couldn't get group with id $groupId")
         }
     }
-
     var isDialogOpen by remember { mutableStateOf(false) }
 
     if (isDialogOpen) {
@@ -107,13 +112,13 @@ fun GroupDetailsPage(
             .fillMaxHeight()
             .padding(48.dp)
     ) {
+
         OutlinedTextField(
-            value = groupName,
+            value = if (changed) groupName else group?.name ?: "",
             label = { Text("Name") },
             onValueChange = {
                 groupName = it
                 changed = true
-                print(changed)
             },
             singleLine = true,
             modifier = Modifier

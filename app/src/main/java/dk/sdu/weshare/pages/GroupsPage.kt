@@ -102,16 +102,15 @@ fun GroupsPage(
                         Text(group.name, fontSize = 30.sp,
                             textAlign = TextAlign.Start,
                             modifier = Modifier.weight(0.9f))
-
                         Icon(
                             imageVector = Icons.Outlined.KeyboardArrowRight,
                             contentDescription = "View Group ${group.name}",
                             modifier = Modifier
                                 .size(60.dp)
                                 .clip(CircleShape)
-
                         )
                     }
+                    Spacer(modifier = Modifier.size(8.dp))
                 }
             }
         }

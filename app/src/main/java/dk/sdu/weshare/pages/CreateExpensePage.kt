@@ -38,6 +38,7 @@ import dk.sdu.weshare.api.requests.RequestQueue
 import dk.sdu.weshare.authentication.Auth
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
+import dk.sdu.weshare.util.ServiceBuilder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,6 +128,7 @@ fun CreateExpensePage(
                 Api.addExpenseToGroup(groupId, Expense(payer!!.id, name, price.toInt())) {
                     println(it)
                     if (it != null) {
+                        ServiceBuilder.invalidateCache()
                         onSave()
                     } else {
                         println("Couldn't add expense to group, retrying...")
