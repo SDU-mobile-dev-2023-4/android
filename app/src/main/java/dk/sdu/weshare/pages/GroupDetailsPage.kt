@@ -50,6 +50,9 @@ fun GroupDetailsPage(
 ) {
     var group: Group? by remember { mutableStateOf(null) }
     var groupName by remember { mutableStateOf(group?.name ?: "") }
+
+    var changed: Boolean = false
+
     Api.getGroup(groupId) {
         if (it != null) {
             group = it
@@ -87,7 +90,12 @@ fun GroupDetailsPage(
                     .size(60.dp)
                     .clip(CircleShape)
                     .padding(start = 8.dp)
-                    .clickable { onBack() }
+                    .clickable {
+                        if (changed) {
+                            ServiceBuilder.invalidateCache()
+                        }
+                        onBack()
+                    }
             )
         }
     }
@@ -104,7 +112,8 @@ fun GroupDetailsPage(
             label = { Text("Name") },
             onValueChange = {
                 groupName = it
-                ServiceBuilder.invalidateCache()
+                changed = true
+                print(changed)
             },
             singleLine = true,
             modifier = Modifier
@@ -157,6 +166,9 @@ fun GroupDetailsPage(
         Button(onClick = {
             if (group != null) {
                 Api.updateGroup(group!!, groupName) {
+                    if (changed) {
+                        ServiceBuilder.invalidateCache()
+                    }
                     if (it != null) {
                         onSave()
                     }
