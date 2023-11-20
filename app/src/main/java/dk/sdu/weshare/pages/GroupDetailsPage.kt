@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
 import dk.sdu.weshare.models.Group
+import dk.sdu.weshare.util.ServiceBuilder
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -101,7 +102,10 @@ fun GroupDetailsPage(
         OutlinedTextField(
             value = groupName,
             label = { Text("Name") },
-            onValueChange = { groupName = it },
+            onValueChange = {
+                groupName = it
+                ServiceBuilder.invalidateCache()
+            },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
