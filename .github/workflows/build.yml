@@ -22,6 +22,9 @@ jobs:
         distribution: 'adopt'
         java-version: '11'
 
+    - name: Set execute permissions for gradlew
+      run: chmod +x ./gradlew
+
     - name: Build with Gradle
       run: ./gradlew assembleRelease
 
@@ -34,9 +37,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: make gradlw executable
-      run: chmod +x gradlew
 
     - name: Create Release
       id: create_release
