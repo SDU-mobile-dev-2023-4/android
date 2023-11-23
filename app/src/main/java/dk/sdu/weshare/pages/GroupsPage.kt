@@ -76,7 +76,7 @@ fun GroupsPage(
                     .clip(CircleShape)
                     .border(3.dp, color = Color.White, shape = CircleShape)
                     .clickable {
-                        Api.createGroup("Unnamed group") {
+                        Api.createGroup("Unnamed group", "") {
                             if (it != null) {
                                 onViewGroup(it.id)
                             }
