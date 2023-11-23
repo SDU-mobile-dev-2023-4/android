@@ -1,5 +1,6 @@
 package dk.sdu.weshare.pages
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -166,8 +169,8 @@ fun GroupDetailsPage(
             Icon(imageVector = Icons.TwoTone.Add,
                 contentDescription = "onCreateGroup",
                 modifier = Modifier
-                    .padding(start = 16.dp, bottom = 16.dp)
-                    .size(60.dp)
+                    .padding(start = 26.dp, bottom = 16.dp, top = 16.dp)
+                    .size(40.dp)
                     .clip(CircleShape)
                     .border(1.dp, color = Color.White, shape = CircleShape)
                     .clickable { isDialogOpen = true },
@@ -241,13 +244,31 @@ fun AddUserPopup(onAddUser: (email: String) -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(text = "Add User") },
+        containerColor = Color(0xA1112b5d),
+        modifier = Modifier
+            .border(6.dp, Brush.verticalGradient(
+                colors = listOf(Color(0x00112b5d), Color(0xA0112b5d)),
+                startY = 0f,
+                endY = 500f
+            ), RoundedCornerShape(26.dp)),
         text = {
             TextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text(text = "Email") },
+                label = { Text(text = "User Email") },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xA1112b5d)),
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.White,
+                    cursorColor = Color.White,
+                    focusedLabelColor = Color.White,
+                    unfocusedLabelColor = Color.White,
+                    focusedIndicatorColor = Color.White,
+                    unfocusedIndicatorColor = Color.White,
+                    containerColor = Color(0xA0112b5d),
+                ),
             )
         },
         confirmButton = {
