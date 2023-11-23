@@ -1,0 +1,75 @@
+name: Build and Release APK
+
+on:
+  push:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: Build with Gradle
+      run: ./gradlew assembleRelease
+
+  release:
+    name: Release APK
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          Changes in this release:
+          - Describe your changes here
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-release
+        path: app/build/outputs/apk/release/*.apk
+
+    - name: Deploy to GitHub Packages
+      uses: actions/gh@v2
+      with:
+        args: container create package -t MyPackage -y
+
+    - name: Complete Release
+      id: complete_release
+      uses: actions/create-release@v1
+      with:
+        release_id: ${{ steps.create_release.outputs.id }}
+        tag_name: ${{ github.ref }}
+        body: |
+          Changes in this release:
+          - Describe your changes here
+
+    - name: Upload Artifact to Release
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.complete_release.outputs.upload_url }}
+        asset_path: app/build/outputs/apk/release/*.apk
+        asset_name: app-release.apk
+        asset_content_type: application/vnd.android.package-archive
