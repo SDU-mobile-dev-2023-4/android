@@ -1,7 +1,6 @@
 package dk.sdu.weshare.pages
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -53,8 +52,6 @@ fun GroupsPage(
     var isVisible by remember { mutableStateOf(false) }
     var groups: List<Group> by remember { mutableStateOf(listOf()) }
     Api.getAllGroups { groups = it ?: listOf()}
-
-
     Column {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -62,7 +59,6 @@ fun GroupsPage(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp)
-
         ) {
             Icon(imageVector = Icons.Outlined.AccountCircle,
                 contentDescription = "Profile",
@@ -70,7 +66,7 @@ fun GroupsPage(
                     .size(60.dp)
                     .clip(CircleShape)
                     .clickable { onViewProfile() },
-                tint = Color.Green
+                tint = Color.White
             )
             Text(user.name, fontSize = 30.sp)
             Icon(imageVector = Icons.TwoTone.Add,
@@ -78,7 +74,7 @@ fun GroupsPage(
                 modifier = Modifier
                     .size(50.dp)
                     .clip(CircleShape)
-                    .border(1.dp, color = Color.Green, shape = CircleShape)
+                    .border(3.dp, color = Color.White, shape = CircleShape)
                     .clickable {
                         Api.createGroup("Unnamed group") {
                             if (it != null) {
@@ -118,7 +114,6 @@ fun GroupsPage(
                                 animationSpec = tween(durationMillis = 300)
                             )
                 ) {
-
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
@@ -134,7 +129,6 @@ fun GroupsPage(
                                         Color.Transparent,
                                         Color(0xFF2CF128)
                                     )
-
                                 )
                             )
                             .clickable {
@@ -156,7 +150,7 @@ fun GroupsPage(
                         )
                     }
                 }
-                    Spacer(modifier = Modifier.size(8.dp))
+                Spacer(modifier = Modifier.size(8.dp))
 
             }
         }
