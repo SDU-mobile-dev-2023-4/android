@@ -123,9 +123,9 @@ class Api {
 				.enqueue(simpleCallback(onResult))
 		}
 
-		fun createGroup(name: String, onResult: (Group?) -> Unit) {
+		fun createGroup(name: String, description: String, onResult: (Group?) -> Unit) {
 			retrofit
-				.createGroup(CreateGroupRequest(name))
+				.createGroup(CreateGroupRequest(name, description))
 				.enqueue(simpleCallback(onResult))
 		}
 
