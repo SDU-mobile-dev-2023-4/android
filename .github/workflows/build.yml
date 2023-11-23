@@ -35,6 +35,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: make gradlw executable
+      run: chmod +x gradlew
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
