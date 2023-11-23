@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -67,15 +68,13 @@ fun SignInPage(
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(48.dp)) {
-//        Text("UOMI", fontSize = 70.sp)
         Box(modifier = Modifier
             .size(200.dp),
         ) {
             Image(painter = painter,
                 contentDescription = "Logo",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(50.dp)),
+                    .fillMaxSize(),
                 alignment = Alignment.Center)
         }
         Spacer(Modifier.size(48.dp))
@@ -91,7 +90,14 @@ fun SignInPage(
                 .padding(top = 16.dp),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next)
+                imeAction = ImeAction.Next),
+            colors =  TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.LightGray,
+                focusedBorderColor = Color.White,
+                textColor = Color.White,
+                cursorColor = Color.White,
+                focusedLabelColor = Color.White,
+            )
 
         )
 
@@ -107,9 +113,17 @@ fun SignInPage(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
+
             keyboardActions = KeyboardActions(
                 onDone = { signInAction() }
         ),
+            colors =  TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.LightGray,
+                focusedBorderColor = Color.White,
+                textColor = Color.White,
+                cursorColor = Color.White,
+                focusedLabelColor = Color.White,
+            )
         )
 
         Spacer(Modifier.size(48.dp))
@@ -136,4 +150,3 @@ fun SignInPage(
         }
     }
 }
-

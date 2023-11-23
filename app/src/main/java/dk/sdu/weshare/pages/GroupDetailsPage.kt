@@ -8,15 +8,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -52,7 +57,8 @@ fun GroupDetailsPage(
     onBack: () -> Unit,
 ) {
     var group: Group? by remember { mutableStateOf(null) }
-    var groupName by remember { mutableStateOf("") }
+    var groupName by remember { mutableStateOf("")}
+    var groupDescription by remember { mutableStateOf("") }
     var changed by remember { mutableStateOf(false) }
 
     Api.getGroup(groupId) {
@@ -100,7 +106,8 @@ fun GroupDetailsPage(
                             ServiceBuilder.invalidateCache()
                         }
                         onBack()
-                    }
+                    },
+                tint = Color.White
             )
         }
     }
@@ -128,10 +135,28 @@ fun GroupDetailsPage(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done
             ),
-        )
+        ) // groupName
 
         Spacer(Modifier.size(16.dp))
 
+        OutlinedTextField(
+            value = if (changed) groupDescription else group?.name ?: "",
+            label = { Text("Description") },
+            onValueChange = {
+                groupDescription = it
+                changed = true
+            },
+            singleLine = false,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(top = 16.dp),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+        )// groupDescription
+        Spacer(Modifier.size(16.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -141,16 +166,18 @@ fun GroupDetailsPage(
             Text(
                 "Members",
                 fontSize = 30.sp,
-                modifier = Modifier.padding(start = 16.dp)
             )
 
             Icon(imageVector = Icons.TwoTone.Add,
                 contentDescription = "onCreateGroup",
                 modifier = Modifier
-                    .padding(start = 16.dp)
+                    .padding(start = 16.dp, bottom = 16.dp)
                     .size(60.dp)
-                    .border(1.dp, color = Color.Black)
-                    .clickable { isDialogOpen = true })
+                    .clip(CircleShape)
+                    .border(1.dp, color = Color.White, shape = CircleShape)
+                    .clickable { isDialogOpen = true },
+                tint = Color.White
+            )
         }
 
         Column {
@@ -160,15 +187,33 @@ fun GroupDetailsPage(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp)
+                        .clip(RoundedCornerShape(8.dp))
                 ) {
-                    Text(member.email, fontSize = 30.sp)
+                    Text(member.email, fontSize = 15.sp, modifier = Modifier.padding(start = 8.dp))
+                    Icon(
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = "Remove group member",
+                        modifier = Modifier
+                            .size(25.dp)
+                            .clip(CircleShape)
+                            .clickable {
+                                Api.removeUserFromGroup(group!!, member) {
+                                    if (it != null) {
+                                        group = it
+                                    }
+                                }
+                            },
+                        tint = Color.Red // Apply the red tint color here
+                    )
+
                 }
+                Spacer(modifier = Modifier.size(8.dp))
             }
         }
 
         Spacer(Modifier.weight(1f))
-        Button(onClick = {
+        Button(
+            onClick = {
             if (group != null) {
                 Api.updateGroup(group!!, groupName) {
                     if (changed) {
@@ -179,7 +224,15 @@ fun GroupDetailsPage(
                     }
                 }
             }
-        }) {
+        },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Green,
+                contentColor = Color.White
+            ),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
             Text("Save", fontSize = 30.sp)
         }
     }

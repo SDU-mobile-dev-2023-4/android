@@ -3,11 +3,13 @@ package dk.sdu.weshare.pages
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -67,7 +69,8 @@ fun GroupPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable { onBack() }
+                    .clickable { onBack() },
+                tint = Color.White
             )
             //Group name
             Text( group?.name ?: "...",
@@ -83,7 +86,8 @@ fun GroupPage(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .clickable(onClick = { onEditGroup(groupId) })
+                    .clickable(onClick = { onEditGroup(groupId) }),
+                tint = Color.White
             )
         }
     }
@@ -94,7 +98,6 @@ fun GroupPage(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(16.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -198,6 +201,12 @@ fun CalculationList(group: Group) {
 
 @Composable
 fun ExpensesList(group: Group) {
+    Box (
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(400.dp)
+            .padding(start = 16.dp)
+    ){
     Column (
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top,
@@ -205,33 +214,37 @@ fun ExpensesList(group: Group) {
             .fillMaxWidth()
             .padding(32.dp)
             .verticalScroll(rememberScrollState())
+            .border(2.dp, color = Color.White, shape = RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(8.dp))
     ) {
-        group.expenses!!.forEach { expense ->
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, color = Color.Black)
-                    .padding(all = 4.dp)
-            ) {
-                Text(text = group.members!!.find { it.id == expense.payerId }?.name ?: "Unknown user",
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .weight(0.6f))
 
-                Text(text = expense.name,
-                    fontSize = 20.sp, textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(1f))
-
-                Text(text = "${expense.price}",
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.End,
+            group.expenses!!.forEach { expense ->
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .padding(end = 8.dp)
-                        .weight(0.6f)
-                )
+                        .fillMaxWidth()
+                        .border(0.5.dp, color = Color.White)
+                        .padding(all = 8.dp)
+                ) {
+                    Text(text = group.members!!.find { it.id == expense.payerId }?.name ?: "Unknown user",
+                        fontSize = 20.sp,
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .weight(0.6f))
+
+                    Text(text = expense.name,
+                        fontSize = 20.sp, textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1f))
+
+                    Text(text = "${expense.price}",
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.End,
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .weight(0.6f)
+                    )
+                }
             }
         }
     }
