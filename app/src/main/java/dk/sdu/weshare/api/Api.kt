@@ -63,22 +63,22 @@ class Api {
 
 		fun removeUserFromGroup(group: Group, user: User, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(group.id, user.email)
+				.removeUserFromGroup(group.id, user.id)
 				.enqueue(simpleCallback(onResult))
 		}
-		fun removeUserFromGroup(group: Group, userEmail: String, onResult: (Group?) -> Unit) {
+		fun removeUserFromGroup(group: Group, userId: Int, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(group.id, userEmail)
+				.removeUserFromGroup(group.id, userId)
 				.enqueue(simpleCallback(onResult))
 		}
 		fun removeUserFromGroup(groupId: Int, user: User, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(groupId, user.email)
+				.removeUserFromGroup(groupId, user.id)
 				.enqueue(simpleCallback(onResult))
 		}
-		fun removeUserFromGroup(groupId: Int, userEmail: String, onResult: (Group?) -> Unit) {
+		fun removeUserFromGroup(groupId: Int, userId: Int, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(groupId, userEmail)
+				.removeUserFromGroup(groupId, userId)
 				.enqueue(simpleCallback(onResult))
 		}
 

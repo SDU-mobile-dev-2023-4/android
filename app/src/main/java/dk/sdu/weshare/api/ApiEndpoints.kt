@@ -15,7 +15,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ApiEndpoints {
 	@POST("api/groups/{id}/expenses")
@@ -24,8 +23,8 @@ interface ApiEndpoints {
 	@POST("api/groups/{id}/users")
 	fun addUserToGroup(@Path("id") groupId: Int, @Body request: AddUserToGroupRequest): Call<Group>
 
-	@DELETE("api/groups/{id}/users")
-	fun removeUserFromGroup(@Path("id") groupId: Int, @Query("email") userEmail: String): Call<Group>
+	@DELETE("api/groups/{id}/users/{userId}")
+	fun removeUserFromGroup(@Path("id") groupId: Int, @Path("userId") userId: Int): Call<Group>
 
 	@GET("api/groups/{id}")
 	fun getGroup(@Path("id") groupId: Int): Call<Group>
