@@ -35,7 +35,9 @@ import dk.sdu.weshare.authentication.Auth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfilePage(onSave: () -> Unit) {
+fun ProfilePage(
+    onSave: () -> Unit
+) {
 
     val user = Auth.user!!
 
@@ -68,7 +70,10 @@ fun ProfilePage(onSave: () -> Unit) {
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
-                onDone = { onSave() }
+                onDone = {
+                    Auth.user!!.name = name;
+                    onSave()
+                }
             ),
             colors =  TextFieldDefaults.outlinedTextFieldColors(
                 unfocusedBorderColor = Color.LightGray,
@@ -97,7 +102,9 @@ fun ProfilePage(onSave: () -> Unit) {
         Spacer(Modifier.size(48.dp))
         // This should update the user's name, but there is no API for that
         Button(
-            onClick = onSave,
+            onClick = {
+                onSave()
+              },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Green,

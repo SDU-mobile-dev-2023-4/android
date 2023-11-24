@@ -56,7 +56,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("profile") {
                         ProfilePage(
-                            onSave = { navController.popBackStack() }
+                            onSave = {
+                                navController.popBackStack()
+                            }
                         )
                     }
                     composable(
