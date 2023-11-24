@@ -53,4 +53,7 @@ interface ApiEndpoints {
 	@Headers("Cache-Control: no-cache")
 	@GET("/api/notifications")
 	fun getNotifications(): Call<Notifications>
+
+	@POST("/api/groups/{id}/notify")
+	fun notifyGroup(@Path("id") groupId: Int, @Body notification: Notification): Call<Unit>
 }
