@@ -49,6 +49,13 @@ class NotificationHandler(notificationUtils: NotificationUtils) {
                         val information = ExpenseAdded(raw)
                         notificationUtils.createNotification("Expense added", "${information.expense.name} has been added to the group ${information.group.name} by ${information.user.name} for ${information.expense.price} kr.", notification.id.hashCode())
                     }
+                    "App\\Notifications\\Reminder" -> {
+                        println("Reminder")
+
+                        val raw = notification.data as LinkedTreeMap<String, Any>
+                        val information = ExpenseAdded(raw)
+                        notificationUtils.createNotification("Reminder", "You have an expense to pay for ${information.expense.name} in the group ${information.group.name}", notification.id.hashCode())
+                    }
                     else -> {
                         println("Unknown notification type recieved")
                     }
