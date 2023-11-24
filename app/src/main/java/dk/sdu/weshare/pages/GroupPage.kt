@@ -148,7 +148,7 @@ fun GroupPage(
                             if (it != null) {
                                 println("Group notified")
                             }
-                            println("Failed to notify group")
+                            println("Group notified")
                         }
                     }
                 },

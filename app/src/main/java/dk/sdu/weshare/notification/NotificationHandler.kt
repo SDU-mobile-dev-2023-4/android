@@ -55,7 +55,7 @@ class NotificationHandler(notificationUtils: NotificationUtils) {
 
                         val raw = notification.data as LinkedTreeMap<String, Any>
                         val information = Reminder(raw)
-                        notificationUtils.createNotification("Reminder", "${information.user.name}} reminded you to pay group ${information.group.name}", notification.id.hashCode())
+                        notificationUtils.createNotification("Reminder", "${information.user.name} reminded you to pay in ${information.group.name}", notification.id.hashCode())
                     }
                     else -> {
                         println("Unknown notification type recieved")
