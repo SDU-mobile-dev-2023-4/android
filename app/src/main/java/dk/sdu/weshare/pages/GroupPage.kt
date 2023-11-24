@@ -74,7 +74,7 @@ fun GroupPage(
                     .size(60.dp)
                     .clip(CircleShape)
                     .clickable { onBack() },
-                tint = Color.White
+                tint = Color.Green
             )
             //Group name
             Text( group?.name ?: "...",
@@ -91,7 +91,7 @@ fun GroupPage(
                     .size(60.dp)
                     .clip(CircleShape)
                     .clickable(onClick = { onEditGroup(groupId) }),
-                tint = Color.White
+                tint = Color.Green
             )
         }
         Divider( color = Color(0x80FFFFFF), thickness = 1.dp, modifier = Modifier.padding( top = 8.dp, bottom = 8.dp))

@@ -109,7 +109,7 @@ fun GroupDetailsPage(
                         }
                         onBack()
                     },
-                tint = Color.White
+                tint = Color.Green
             )
         }
     }
