@@ -55,5 +55,5 @@ interface ApiEndpoints {
 	fun getNotifications(): Call<Notifications>
 
 	@POST("/api/groups/{id}/notify")
-	fun notifyGroup(@Path("id") groupId: Int, @Body notification: Notification): Call<Unit>
+	fun notifyGroup(@Path("id") groupId: Int): Call<Unit>
 }
