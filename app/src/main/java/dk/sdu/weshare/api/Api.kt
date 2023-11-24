@@ -8,6 +8,7 @@ import dk.sdu.weshare.api.requests.RegisterRequest
 import dk.sdu.weshare.api.requests.UpdateGroupRequest
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
+import dk.sdu.weshare.models.Notifications
 import dk.sdu.weshare.models.User
 import dk.sdu.weshare.util.ServiceBuilder
 import retrofit2.Call
@@ -137,6 +138,12 @@ class Api {
 		fun login(email: String, password: String, onResult: (User?) -> Unit) {
 			retrofit
 				.login(LoginRequest(email, password, Build.MODEL))
+				.enqueue(simpleCallback(onResult))
+		}
+
+		fun getNotifications(onResult: (Notifications?) -> Unit) {
+			retrofit
+				.getNotifications()
 				.enqueue(simpleCallback(onResult))
 		}
 	}
