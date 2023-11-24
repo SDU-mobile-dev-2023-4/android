@@ -75,6 +75,7 @@ fun GroupDetailsPage(
     if (isDialogOpen) {
         AddUserPopup(
             onAddUser = { email ->
+                ServiceBuilder.invalidateCache()
                 Api.addUserToGroup(group!!, email) {
                     if (it != null) {
                         group = it
@@ -213,12 +214,14 @@ fun GroupDetailsPage(
         Button(
             onClick = {
             if (group != null) {
-                Api.updateGroup(group!!, groupName) {
-                    if (changed) {
-                        ServiceBuilder.invalidateCache()
-                    }
-                    if (it != null) {
-                        onSave()
+                if (!changed) {
+                    onSave()
+                } else {
+                    ServiceBuilder.invalidateCache()
+                    Api.updateGroup(group!!, groupName, groupDescription) {
+                        if (it != null) {
+                            onSave()
+                        }
                     }
                 }
             }
@@ -230,6 +233,7 @@ fun GroupDetailsPage(
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
         ) {
             Text("Save", fontSize = 30.sp)
         }

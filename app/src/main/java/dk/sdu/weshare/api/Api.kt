@@ -94,14 +94,14 @@ class Api {
 				.enqueue(simpleCallback(onResult))
 		}
 
-		fun updateGroup(group: Group, name: String, onResult: (Group?) -> Unit) {
+		fun updateGroup(group: Group, name: String, description: String, onResult: (Group?) -> Unit) {
 			retrofit
-				.updateGroup(group.id, UpdateGroupRequest(name))
+				.updateGroup(group.id, UpdateGroupRequest(name, description))
 				.enqueue(simpleCallback(onResult))
 		}
-		fun updateGroup(groupId: Int, name: String, onResult: (Group?) -> Unit) {
+		fun updateGroup(groupId: Int, name: String, description: String, onResult: (Group?) -> Unit) {
 			retrofit
-				.updateGroup(groupId, UpdateGroupRequest(name))
+				.updateGroup(groupId, UpdateGroupRequest(name, description))
 				.enqueue(simpleCallback(onResult))
 		}
 
