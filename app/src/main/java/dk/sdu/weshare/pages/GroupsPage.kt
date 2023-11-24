@@ -71,7 +71,7 @@ fun GroupsPage(
                     .size(60.dp)
                     .clip(CircleShape)
                     .clickable { onViewProfile() },
-                tint = Color.White
+                tint = Color.Green
             )
             Text(user.name, fontSize = 30.sp)
             Icon(imageVector = ImageVector.vectorResource(id = dk.sdu.weshare.R.drawable.group_add),
