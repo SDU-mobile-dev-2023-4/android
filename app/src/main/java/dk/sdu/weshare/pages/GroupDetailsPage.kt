@@ -38,8 +38,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
@@ -76,6 +79,7 @@ fun GroupDetailsPage(
     if (isDialogOpen) {
         AddUserPopup(
             onAddUser = { email ->
+                ServiceBuilder.invalidateCache()
                 Api.addUserToGroup(group!!, email) {
                     if (it != null) {
                         group = it
@@ -106,7 +110,7 @@ fun GroupDetailsPage(
                         }
                         onBack()
                     },
-                tint = Color.White
+                tint = Color.Green
             )
         }
     }
@@ -167,19 +171,18 @@ fun GroupDetailsPage(
                 fontSize = 30.sp,
             )
 
-            Icon(imageVector = Icons.TwoTone.Add,
+            Icon(imageVector = ImageVector.vectorResource(id = dk.sdu.weshare.R.drawable.person_add_24),
                 contentDescription = "onCreateGroup",
                 modifier = Modifier
                     .padding(start = 26.dp, bottom = 16.dp, top = 16.dp)
                     .size(40.dp)
                     .clip(CircleShape)
-                    .border(1.dp, color = Color.White, shape = CircleShape)
                     .clickable { isDialogOpen = true },
-                tint = Color.White
+                tint = Color.Green
             )
         }
 
-        Column {
+        Column{
             group?.members?.forEach { member ->
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -188,7 +191,19 @@ fun GroupDetailsPage(
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp))
                 ) {
-                    Text(member.email, fontSize = 15.sp, modifier = Modifier.padding(start = 8.dp))
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = dk.sdu.weshare.R.drawable.person_24),
+                        contentDescription = "Group",
+                        modifier = Modifier
+                            .size(30.dp),
+                        tint = Color.White
+                    )
+                    Text(
+                        member.email, fontSize = 15.sp,
+                        modifier = Modifier.padding(start = 8.dp),
+                        textAlign = TextAlign.Start,
+
+                    )
                     Icon(
                         imageVector = Icons.Outlined.Delete,
                         contentDescription = "Remove group member",
@@ -214,12 +229,14 @@ fun GroupDetailsPage(
         Button(
             onClick = {
             if (group != null) {
-                Api.updateGroup(group!!, groupName) {
-                    if (changed) {
-                        ServiceBuilder.invalidateCache()
-                    }
-                    if (it != null) {
-                        onSave()
+                if (!changed) {
+                    onSave()
+                } else {
+                    ServiceBuilder.invalidateCache()
+                    Api.updateGroup(group!!, groupName, groupDescription) {
+                        if (it != null) {
+                            onSave()
+                        }
                     }
                 }
             }
@@ -231,6 +248,7 @@ fun GroupDetailsPage(
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
         ) {
             Text("Save", fontSize = 30.sp)
         }

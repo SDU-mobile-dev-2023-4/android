@@ -4,7 +4,6 @@ import dk.sdu.weshare.api.requests.LoginRequest
 import dk.sdu.weshare.api.requests.RegisterRequest
 import dk.sdu.weshare.api.requests.AddUserToGroupRequest
 import dk.sdu.weshare.api.requests.CreateGroupRequest
-import dk.sdu.weshare.api.requests.RemoveUserFromGroupRequest
 import dk.sdu.weshare.api.requests.UpdateGroupRequest
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
@@ -16,7 +15,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ApiEndpoints {
 	@POST("api/groups/{id}/expenses")
@@ -25,8 +23,8 @@ interface ApiEndpoints {
 	@POST("api/groups/{id}/users")
 	fun addUserToGroup(@Path("id") groupId: Int, @Body request: AddUserToGroupRequest): Call<Group>
 
-	@DELETE("api/groups/{id}/users")
-	fun removeUserFromGroup(@Path("id") groupId: Int, @Body request: RemoveUserFromGroupRequest): Call<Group>
+	@DELETE("api/groups/{id}/users/{userId}")
+	fun removeUserFromGroup(@Path("id") groupId: Int, @Path("userId") userId: Int): Call<Group>
 
 	@GET("api/groups/{id}")
 	fun getGroup(@Path("id") groupId: Int): Call<Group>

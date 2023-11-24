@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -70,7 +74,7 @@ fun GroupPage(
                     .size(60.dp)
                     .clip(CircleShape)
                     .clickable { onBack() },
-                tint = Color.White
+                tint = Color.Green
             )
             //Group name
             Text( group?.name ?: "...",
@@ -87,9 +91,10 @@ fun GroupPage(
                     .size(60.dp)
                     .clip(CircleShape)
                     .clickable(onClick = { onEditGroup(groupId) }),
-                tint = Color.White
+                tint = Color.Green
             )
         }
+        Divider( color = Color(0x80FFFFFF), thickness = 1.dp, modifier = Modifier.padding( top = 8.dp, bottom = 8.dp))
     }
 
     Column(
@@ -120,15 +125,20 @@ fun GroupPage(
                 .buttonColors(
                     contentColor = Color.Transparent,
                     containerColor = Color.Transparent
-                )
+                ),
+            contentPadding = PaddingValues(16.dp, 0.dp, 8.dp, 0.dp)
         ){
-
             Text("Add",
                 fontSize = 30.sp,
                 color = Color.Green)
+            Icon(
+                imageVector = ImageVector.vectorResource(id = dk.sdu.weshare.R.drawable.attach_money_24),
+                contentDescription = "Add",
+                modifier = Modifier
+                    .size(40.dp),
+                tint = Color.Green
+            )
         }
-
-        Spacer(modifier = Modifier.size(30.dp))
         // Integrate the ExpensesList Composable
         group?.let { ExpensesList(it) }
     }

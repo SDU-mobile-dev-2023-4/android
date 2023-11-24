@@ -93,6 +93,7 @@ class MainActivity : ComponentActivity() {
                         CreateExpensePage(
                             navBackStackEntry.arguments?.getInt("groupId")!!,
                             onSave = { navController.popBackStack() },
+                            onBack = { navController.popBackStack() },
                         )
                     }
                 }
