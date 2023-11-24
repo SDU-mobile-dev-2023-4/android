@@ -147,13 +147,13 @@ fun GroupPage(
 @Composable
 fun CalculationList(group: Group) {
 
-    val totalExpenses = group.expenses!!.sumOf { it.price }
+    val totalExpenses = group.expenses.sumOf { it.price }
     val ourExpenses = group.expenses
         .filter { it.payerId == Auth.user!!.id } // only get our expenses
         .sumOf { it.price }
 
     // calculate the amount of money each member should pay
-    val expectedShare = totalExpenses / group.members!!.size
+    val expectedShare = totalExpenses / group.members.size
 
     // calculate the amount of money the user owes
     val surplus = ourExpenses - expectedShare
@@ -228,7 +228,7 @@ fun ExpensesList(group: Group) {
             .clip(RoundedCornerShape(8.dp))
     ) {
 
-            group.expenses!!.forEach { expense ->
+            group.expenses.forEach { expense ->
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -237,7 +237,7 @@ fun ExpensesList(group: Group) {
                         .border(0.5.dp, color = Color.White)
                         .padding(all = 8.dp)
                 ) {
-                    Text(text = group.members!!.find { it.id == expense.payerId }?.name ?: "Unknown user",
+                    Text(text = group.members.find { it.id == expense.payerId }?.name ?: "Unknown user",
                         fontSize = 20.sp,
                         modifier = Modifier
                             .padding(start = 8.dp)

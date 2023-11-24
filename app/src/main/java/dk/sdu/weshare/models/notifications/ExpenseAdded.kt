@@ -1,6 +1,6 @@
 package dk.sdu.weshare.models.notifications
 
-import dk.sdu.weshare.models.Group
+import dk.sdu.weshare.models.GroupSummary
 import dk.sdu.weshare.models.User
 import dk.sdu.weshare.models.Expense
 
@@ -10,11 +10,10 @@ class ExpenseAdded(rawData: Map<String, Any>) {
         rawData["expense"]["name"] as String,
         (rawData["expense"]["price"] as String).toInt()
     )
-    val group: Group = Group(
+    val group: GroupSummary = GroupSummary(
         (rawData["group"]["id"] as Double).toInt(),
         rawData["group"]["name"] as String,
         rawData["group"]["description"] as String,
-        null, null
     )
     val user: User = User(
         (rawData["created_by"]["id"] as Double).toInt(),
@@ -33,4 +32,3 @@ class ExpenseAdded(rawData: Map<String, Any>) {
 private operator fun Any?.get(s: String): Any {
     return (this as Map<String, Any>)[s]!!
 }
-    
