@@ -5,7 +5,6 @@ import dk.sdu.weshare.api.requests.AddUserToGroupRequest
 import dk.sdu.weshare.api.requests.CreateGroupRequest
 import dk.sdu.weshare.api.requests.LoginRequest
 import dk.sdu.weshare.api.requests.RegisterRequest
-import dk.sdu.weshare.api.requests.RemoveUserFromGroupRequest
 import dk.sdu.weshare.api.requests.UpdateGroupRequest
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
@@ -64,22 +63,22 @@ class Api {
 
 		fun removeUserFromGroup(group: Group, user: User, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(group.id, RemoveUserFromGroupRequest(user.email))
+				.removeUserFromGroup(group.id, user.id)
 				.enqueue(simpleCallback(onResult))
 		}
-		fun removeUserFromGroup(group: Group, userEmail: String, onResult: (Group?) -> Unit) {
+		fun removeUserFromGroup(group: Group, userId: Int, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(group.id, RemoveUserFromGroupRequest(userEmail))
+				.removeUserFromGroup(group.id, userId)
 				.enqueue(simpleCallback(onResult))
 		}
 		fun removeUserFromGroup(groupId: Int, user: User, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(groupId, RemoveUserFromGroupRequest(user.email))
+				.removeUserFromGroup(groupId, user.id)
 				.enqueue(simpleCallback(onResult))
 		}
-		fun removeUserFromGroup(groupId: Int, userEmail: String, onResult: (Group?) -> Unit) {
+		fun removeUserFromGroup(groupId: Int, userId: Int, onResult: (Group?) -> Unit) {
 			retrofit
-				.removeUserFromGroup(groupId, RemoveUserFromGroupRequest(userEmail))
+				.removeUserFromGroup(groupId, userId)
 				.enqueue(simpleCallback(onResult))
 		}
 
