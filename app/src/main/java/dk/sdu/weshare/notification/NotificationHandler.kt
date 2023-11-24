@@ -4,6 +4,7 @@ import com.google.gson.internal.LinkedTreeMap
 import dk.sdu.weshare.api.Api
 import dk.sdu.weshare.models.notifications.AddedToGroup
 import dk.sdu.weshare.models.notifications.ExpenseAdded
+import dk.sdu.weshare.models.notifications.Reminder
 import dk.sdu.weshare.models.notifications.RemovedFromGroup
 import dk.sdu.weshare.util.NotificationUtils
 
@@ -49,12 +50,12 @@ class NotificationHandler(notificationUtils: NotificationUtils) {
                         val information = ExpenseAdded(raw)
                         notificationUtils.createNotification("Expense added", "${information.expense.name} has been added to the group ${information.group.name} by ${information.user.name} for ${information.expense.price} kr.", notification.id.hashCode())
                     }
-                    "App\\Notifications\\Reminder" -> {
+                    "App\\Notifications\\MissingPayment" -> {
                         println("Reminder")
 
                         val raw = notification.data as LinkedTreeMap<String, Any>
-                        val information = ExpenseAdded(raw)
-                        notificationUtils.createNotification("Reminder", "You have an expense to pay for ${information.expense.name} in the group ${information.group.name}", notification.id.hashCode())
+                        val information = Reminder(raw)
+                        notificationUtils.createNotification("Reminder", "${information.user.name}} reminded you to pay group ${information.group.name}", notification.id.hashCode())
                     }
                     else -> {
                         println("Unknown notification type recieved")
