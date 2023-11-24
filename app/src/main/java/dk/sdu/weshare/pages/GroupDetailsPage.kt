@@ -217,7 +217,7 @@ fun GroupDetailsPage(
                     onSave()
                 } else {
                     ServiceBuilder.invalidateCache()
-                    Api.updateGroup(group!!, groupName) {
+                    Api.updateGroup(group!!, groupName, groupDescription) {
                         if (it != null) {
                             onSave()
                         }
