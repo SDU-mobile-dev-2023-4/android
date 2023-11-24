@@ -213,12 +213,14 @@ fun GroupDetailsPage(
         Button(
             onClick = {
             if (group != null) {
-                Api.updateGroup(group!!, groupName) {
-                    if (changed) {
-                        ServiceBuilder.invalidateCache()
-                    }
-                    if (it != null) {
-                        onSave()
+                if (!changed) {
+                    onSave()
+                } else {
+                    ServiceBuilder.invalidateCache()
+                    Api.updateGroup(group!!, groupName) {
+                        if (it != null) {
+                            onSave()
+                        }
                     }
                 }
             }
