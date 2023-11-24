@@ -195,6 +195,7 @@ fun GroupDetailsPage(
                             .size(25.dp)
                             .clip(CircleShape)
                             .clickable {
+                                ServiceBuilder.invalidateCache()
                                 Api.removeUserFromGroup(group!!, member) {
                                     if (it != null) {
                                         group = it
