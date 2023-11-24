@@ -4,7 +4,6 @@ import dk.sdu.weshare.api.requests.LoginRequest
 import dk.sdu.weshare.api.requests.RegisterRequest
 import dk.sdu.weshare.api.requests.AddUserToGroupRequest
 import dk.sdu.weshare.api.requests.CreateGroupRequest
-import dk.sdu.weshare.api.requests.RemoveUserFromGroupRequest
 import dk.sdu.weshare.api.requests.UpdateGroupRequest
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
@@ -26,7 +25,7 @@ interface ApiEndpoints {
 	fun addUserToGroup(@Path("id") groupId: Int, @Body request: AddUserToGroupRequest): Call<Group>
 
 	@DELETE("api/groups/{id}/users")
-	fun removeUserFromGroup(@Path("id") groupId: Int, @Body request: RemoveUserFromGroupRequest): Call<Group>
+	fun removeUserFromGroup(@Path("id") groupId: Int, @Query("email") userEmail: String): Call<Group>
 
 	@GET("api/groups/{id}")
 	fun getGroup(@Path("id") groupId: Int): Call<Group>
