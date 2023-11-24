@@ -80,22 +80,14 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = startPage) {
                     composable("signIn") {
                         SignInPage(
-                            onRegister = {
-                                navController.navigate("register")
-                            },
-                            onSignIn = {
-                                navController.navigate("groups")
-                            },
+                            onRegister = {navController.navigate("register")},
+                            onSignIn = {navController.navigate("groups")},
                         )
                     }
                     composable("register") {
                         RegisterPage(
-                            onSignIn = { 
-                                navController.navigate("signIn") 
-                            },
-                            onRegister = { 
-                                navController.navigate("groups")
-                            },
+                            onSignIn = {navController.navigate("signIn")},
+                            onRegister = {navController.navigate("groups")},
                         )
                     }
                     composable("groups") {
