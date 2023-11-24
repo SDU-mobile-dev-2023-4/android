@@ -75,6 +75,7 @@ fun GroupDetailsPage(
     if (isDialogOpen) {
         AddUserPopup(
             onAddUser = { email ->
+                ServiceBuilder.invalidateCache()
                 Api.addUserToGroup(group!!, email) {
                     if (it != null) {
                         group = it
@@ -232,6 +233,7 @@ fun GroupDetailsPage(
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
         ) {
             Text("Save", fontSize = 30.sp)
         }
