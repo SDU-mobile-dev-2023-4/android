@@ -38,28 +38,14 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
     }
 
     public fun createNotification() {
-        println("Creating notification")
-        // Create notification
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("WeShare")
-            .setContentText("You have a new notification")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .build()
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            setupPermission()
-            println("Setting up permissions")
-        }
-
-        println("Sending notification")
-        NotificationManagerCompat.from(this).notify(1, notification)
+        createNotification("UOMI", "You have a new notification")
     }
 
     public fun createNotification(title: String, message: String) {
+        createNotification(title, message, 1)
+    }
+
+    public fun createNotification(title: String, message: String, id: Int) {
         println("Creating notification")
         // Create notification
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -76,7 +62,7 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
             setupPermission()
         }
 
-        NotificationManagerCompat.from(this).notify(1, notification)
+        NotificationManagerCompat.from(this).notify(id, notification)
     }
 
     private fun setupPermission() {

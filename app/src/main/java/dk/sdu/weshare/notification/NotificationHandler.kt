@@ -32,14 +32,14 @@ class NotificationHandler(notificationUtils: NotificationUtils) {
 
                         val raw = notification.data as LinkedTreeMap<String, Any>
                         val information = AddedToGroup(raw)
-                        notificationUtils.createNotification("Added to group ${information.group.name}", "You have been added to the group ${information.group.name} by ${information.user.name}")
+                        notificationUtils.createNotification("Added to group ${information.group.name}", "You have been added to the group ${information.group.name} by ${information.user.name}", notification.id.hashCode())
                     }
                     "App\\Notifications\\RemovedFromGroup" -> {
                         println("Removed from group")
 
                         val raw = notification.data as LinkedTreeMap<String, Any>
                         val information = RemovedFromGroup(raw)
-                        notificationUtils.createNotification("Removed from ${information.group.name}", "You have been removed from the group ${information.group.name} by ${information.user.name}")
+                        notificationUtils.createNotification("Removed from ${information.group.name}", "You have been removed from the group ${information.group.name} by ${information.user.name}", notification.id.hashCode())
                     }
                     "App\\Notifications\\ExpenseAdded" -> {
                         println("Expense added")
@@ -47,10 +47,10 @@ class NotificationHandler(notificationUtils: NotificationUtils) {
 
                         val raw = notification.data as LinkedTreeMap<String, Any>
                         val information = ExpenseAdded(raw)
-                        notificationUtils.createNotification("Expense added", "${information.expense.name} has been added to the group ${information.group.name} by ${information.user.name} for ${information.expense.price} kr.")
+                        notificationUtils.createNotification("Expense added", "${information.expense.name} has been added to the group ${information.group.name} by ${information.user.name} for ${information.expense.price} kr.", notification.id.hashCode())
                     }
                     else -> {
-                        println("Unknown notification type")
+                        println("Unknown notification type recieved")
                     }
                 }
             }
