@@ -59,18 +59,10 @@ class NotificationUtils(base: Context) : ContextWrapper(base) {
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            setupPermission()
+            return;
         }
 
         NotificationManagerCompat.from(this).notify(id, notification)
-    }
-
-    private fun setupPermission() {
-        ActivityCompat.requestPermissions(
-            this.context as MainActivity,
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-            1
-        )
     }
 
     companion object {

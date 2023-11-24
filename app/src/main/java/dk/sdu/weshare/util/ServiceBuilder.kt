@@ -34,7 +34,7 @@ object ServiceBuilder {
 		}
 			.cache(cache)
 			.addNetworkInterceptor(CacheInterceptor())
-			.addInterceptor(logging)
+//			.addInterceptor(logging)
 			.build()
 
 		retrofit = Retrofit.Builder()

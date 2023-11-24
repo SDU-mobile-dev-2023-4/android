@@ -146,5 +146,11 @@ class Api {
 				.getNotifications()
 				.enqueue(simpleCallback(onResult))
 		}
+
+		fun notifyGroup(group: Group, onResult: (Unit?) -> Unit) {
+			retrofit
+				.notifyGroup(group.id)
+				.enqueue(simpleCallback(onResult))
+		}
 	}
 }

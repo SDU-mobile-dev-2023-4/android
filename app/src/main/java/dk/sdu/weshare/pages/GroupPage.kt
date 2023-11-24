@@ -25,6 +25,7 @@ import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -104,43 +105,84 @@ fun GroupPage(
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.size(60.dp))
-        }
-
         Spacer(modifier = Modifier.size(30.dp))
         group?.let { CalculationList(it) }
 
         Spacer(modifier = Modifier.size(30.dp))
-        Button(onClick = { onAddExpense(groupId) },
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.border(2.dp,
-                Color.Green,
-                shape = RoundedCornerShape(8.dp)),
-            colors = ButtonDefaults
-                .buttonColors(
-                    contentColor = Color.Transparent,
-                    containerColor = Color.Transparent
+        Row {
+
+
+            Button(
+                onClick = { onAddExpense(groupId) },
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.border(
+                    2.dp,
+                    Color.Green,
+                    shape = RoundedCornerShape(8.dp)
                 ),
-            contentPadding = PaddingValues(16.dp, 0.dp, 8.dp, 0.dp)
-        ){
-            Text("Add",
-                fontSize = 30.sp,
-                color = Color.Green)
-            Icon(
-                imageVector = ImageVector.vectorResource(id = dk.sdu.weshare.R.drawable.attach_money_24),
-                contentDescription = "Add",
-                modifier = Modifier
-                    .size(40.dp),
-                tint = Color.Green
-            )
+                colors = ButtonDefaults
+                    .buttonColors(
+                        contentColor = Color.Transparent,
+                        containerColor = Color.Transparent
+                    ),
+                contentPadding = PaddingValues(16.dp, 0.dp, 8.dp, 0.dp)
+            ) {
+                Text(
+                    "Add",
+                    fontSize = 30.sp,
+                    color = Color.Green
+                )
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = dk.sdu.weshare.R.drawable.attach_money_24),
+                    contentDescription = "Add",
+                    modifier = Modifier
+                        .size(40.dp),
+                    tint = Color.Green
+                )
+            }
+            Spacer(modifier = Modifier.size(15.dp))
+            Button(
+                onClick = {
+                    if (group != null) {
+                        Api.notifyGroup(group!!) {
+                            if (it != null) {
+                                println("Group notified")
+                            }
+                            println("Group notified")
+                        }
+                    }
+                },
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.border(
+                    2.dp,
+                    Color.Yellow,
+                    shape = RoundedCornerShape(8.dp)
+                ),
+                colors = ButtonDefaults
+                    .buttonColors(
+                        contentColor = Color.Transparent,
+                        containerColor = Color.Transparent
+                    ),
+                contentPadding = PaddingValues(16.dp, 0.dp, 8.dp, 0.dp)
+            ) {
+                Text(text = "Notify",
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Yellow,
+                    modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+                )
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = dk.sdu.weshare.R.drawable.notification_add_24),
+                    contentDescription = "Add",
+                    modifier = Modifier
+                        .size(35.dp),
+                    tint = Color.Yellow
+                )
+            }
         }
         // Integrate the ExpensesList Composable
         group?.let { ExpensesList(it) }
+
     }
 }
 

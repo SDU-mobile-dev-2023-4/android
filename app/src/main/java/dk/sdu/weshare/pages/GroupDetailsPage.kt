@@ -216,6 +216,7 @@ fun GroupDetailsPage(
                                         group = it
                                     }
                                 }
+                                ServiceBuilder.invalidateCache()
                             },
                         tint = Color.Red // Apply the red tint color here
                     )
