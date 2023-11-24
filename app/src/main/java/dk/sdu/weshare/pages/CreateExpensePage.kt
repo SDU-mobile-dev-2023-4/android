@@ -177,13 +177,13 @@ fun CreateExpensePage(
         Button(
             onClick = {saveExpense()},
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent,
+                containerColor = Color.Green,
                 contentColor = Color.White
             ),
+            shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .border(BorderStroke(2.dp, Color.White), CircleShape)
-                .clip(RoundedCornerShape(5.dp))
+                .clip(RoundedCornerShape(8.dp))
         ) {
             Text("Save", fontSize = 30.sp)
         }
