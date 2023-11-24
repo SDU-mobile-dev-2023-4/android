@@ -68,6 +68,7 @@ fun GroupDetailsPage(
             // Only update groupName if it hasn't been changed by the user
             if (!changed) {
                 groupName = it.name
+                groupDescription = it.description
             }
         } else {
             println("Couldn't get group with id $groupId")
@@ -109,7 +110,7 @@ fun GroupDetailsPage(
                         }
                         onBack()
                     },
-                tint = Color.White
+                tint = Color.Green
             )
         }
     }
@@ -142,7 +143,7 @@ fun GroupDetailsPage(
         Spacer(Modifier.size(16.dp))
 
         OutlinedTextField(
-            value = if (changed) groupDescription else group?.name ?: "",
+            value = if (changed) groupDescription else group?.description ?: "",
             label = { Text("Description") },
             onValueChange = {
                 groupDescription = it
