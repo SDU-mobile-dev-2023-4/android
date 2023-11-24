@@ -3,8 +3,10 @@ package dk.sdu.weshare.pages
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,12 +16,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.OutlinedTextField
@@ -50,6 +55,7 @@ import dk.sdu.weshare.util.ServiceBuilder
 fun CreateExpensePage(
     groupId: Int,
     onSave: () -> Unit,
+    onBack: () -> Unit,
 ) {
     var group: Group? by remember { mutableStateOf(null) }
 
@@ -75,10 +81,34 @@ fun CreateExpensePage(
                     onSave()
                 } else {
                     println("Couldn't add expense to group, retrying...")
-                    RequestQueue.addExpenseToQueue(groupId, Expense(payer!!.id, name, price.toInt()))
+                    RequestQueue.addExpenseToQueue(
+                        groupId,
+                        Expense(payer!!.id, name, price.toInt())
+                    )
                 }
             }
         }
+    }
+
+
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+    )
+    {
+        //turn back to groups page
+        Icon(
+            imageVector = Icons.Outlined.ArrowBack,
+            contentDescription = "back",
+            modifier = Modifier
+                .size(60.dp)
+                .clip(CircleShape)
+                .padding(start = 8.dp)
+                .clickable {
+                    onBack()
+                },
+            tint = Color.Green
+        )
     }
 
     Column(
@@ -98,8 +128,9 @@ fun CreateExpensePage(
                 .padding(top = 16.dp),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next),
-            colors =  TextFieldDefaults.outlinedTextFieldColors(
+                imeAction = ImeAction.Next
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
                 unfocusedBorderColor = Color.LightGray,
                 focusedBorderColor = Color.White,
                 textColor = Color.White,
@@ -122,7 +153,7 @@ fun CreateExpensePage(
                 onValueChange = {},
                 label = { Text("Payer") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropdownExpanded) },
-                colors =  TextFieldDefaults.outlinedTextFieldColors(
+                colors = TextFieldDefaults.outlinedTextFieldColors(
                     unfocusedBorderColor = Color.LightGray,
                     focusedBorderColor = Color.White,
                     textColor = Color.White,
@@ -138,10 +169,12 @@ fun CreateExpensePage(
             ) {
                 group?.members?.forEach { selectionOption ->
                     DropdownMenuItem(
-                        text = { Text(
-                            selectionOption.name,
-                            fontSize = 20.sp,
-                        ) },
+                        text = {
+                            Text(
+                                selectionOption.name,
+                                fontSize = 20.sp,
+                            )
+                        },
                         onClick = {
                             payer = selectionOption
                             dropdownExpanded = false
@@ -160,11 +193,12 @@ fun CreateExpensePage(
                 .padding(top = 16.dp),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done),
+                imeAction = ImeAction.Done
+            ),
             keyboardActions = KeyboardActions(
                 onDone = { saveExpense() }
             ),
-            colors =  TextFieldDefaults.outlinedTextFieldColors(
+            colors = TextFieldDefaults.outlinedTextFieldColors(
                 unfocusedBorderColor = Color.LightGray,
                 focusedBorderColor = Color.White,
                 textColor = Color.White,
@@ -175,7 +209,7 @@ fun CreateExpensePage(
 
         Spacer(Modifier.size(48.dp))
         Button(
-            onClick = {saveExpense()},
+            onClick = { saveExpense() },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Green,
                 contentColor = Color.White
