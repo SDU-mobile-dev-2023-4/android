@@ -2,6 +2,7 @@ package dk.sdu.weshare.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -43,6 +46,7 @@ fun ProfilePage(
 
     var name by remember { mutableStateOf(user.name) }
     var email by remember { mutableStateOf(user.email) }
+    var checked by remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,7 +75,7 @@ fun ProfilePage(
                 imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    Auth.user!!.name = name;
+                    Auth.user!!.name = name
                     onSave()
                 }
             ),
@@ -99,6 +103,29 @@ fun ProfilePage(
                 containerColor = Color(0x66FFFFFF)
             )
         )
+        Spacer(Modifier.size(48.dp))
+        // Toggle switch to allow users to receive notifications
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Receive notifications", fontSize = 25.sp, color = Color.White)
+            Switch(
+                checked = checked,
+                onCheckedChange = {
+                    println("Switched to $it")
+                    checked = it
+                },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor =Color.White,
+                    checkedTrackColor = Color.Green,
+                    uncheckedThumbColor = Color.LightGray,
+                    uncheckedTrackColor = Color.White
+                )
+            )
+        }
+
         Spacer(Modifier.size(48.dp))
         // This should update the user's name, but there is no API for that
         Button(
