@@ -8,7 +8,6 @@ import dk.sdu.weshare.api.requests.RegisterRequest
 import dk.sdu.weshare.api.requests.UpdateGroupRequest
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
-import dk.sdu.weshare.models.GroupSummary
 import dk.sdu.weshare.models.Notifications
 import dk.sdu.weshare.models.User
 import dk.sdu.weshare.util.ServiceBuilder
@@ -118,7 +117,7 @@ class Api {
 				.enqueue(simpleCallback(onResult))
 		}
 
-		fun getAllGroups(onResult: (List<GroupSummary>?) -> Unit) {
+		fun getAllGroups(onResult: (List<Group>?) -> Unit) {
 			retrofit
 				.getAllGroups()
 				.enqueue(simpleCallback(onResult))
