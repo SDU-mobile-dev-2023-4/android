@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dk.sdu.weshare.api.Api
 import dk.sdu.weshare.authentication.Auth
-import dk.sdu.weshare.models.Group
+import dk.sdu.weshare.models.GroupSummary
 import kotlinx.coroutines.delay
 
 @Composable
@@ -55,7 +55,7 @@ fun GroupsPage(
 ) {
     val user = Auth.user!!
     var isVisible by remember { mutableStateOf(false) }
-    var groups: List<Group> by remember { mutableStateOf(listOf()) }
+    var groups: List<GroupSummary> by remember { mutableStateOf(listOf()) }
     Api.getAllGroups { groups = it ?: listOf()}
     Column {
         Row(
