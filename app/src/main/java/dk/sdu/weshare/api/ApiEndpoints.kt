@@ -7,7 +7,6 @@ import dk.sdu.weshare.api.requests.CreateGroupRequest
 import dk.sdu.weshare.api.requests.UpdateGroupRequest
 import dk.sdu.weshare.models.Expense
 import dk.sdu.weshare.models.Group
-import dk.sdu.weshare.models.GroupSummary
 import dk.sdu.weshare.models.Notification
 import dk.sdu.weshare.models.Notifications
 import dk.sdu.weshare.models.User
@@ -40,7 +39,7 @@ interface ApiEndpoints {
 	fun deleteGroup(@Path("id") groupId: Int): Call<Group>
 
 	@GET("api/groups")
-	fun getAllGroups(): Call<List<GroupSummary>>
+	fun getAllGroups(): Call<List<Group>>
 
 	@POST("api/groups")
 	fun createGroup(@Body request: CreateGroupRequest): Call<Group>

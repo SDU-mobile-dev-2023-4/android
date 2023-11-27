@@ -7,6 +7,6 @@ data class Group(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     @SerializedName("description") val description: String,
-    @SerializedName("users") val members: List<User>,
-    @SerializedName("expenses") val expenses: List<Expense>,
+    @SerializedName("users") val members: List<User>?,
+    @SerializedName("expenses") val expenses: List<Expense>?,
 )
